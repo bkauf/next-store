@@ -15,23 +15,9 @@ export async function POST(request: Request) {
   const postData = await request.json(); // get request body
 
   const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
+  const prompt = "Write a short product description for the item in this image?";
 
-  console.log(postData);
-  const prompt =
-    "Write a short product description for the item in this image?";
-   //@ts-ignore comment
-   // Get the image to send to he model and convert it to base64
-  
-  
-   let imgBase64 = await downloadFile(postData.fileName)
- 
-
-
-  // const imageParts = [
-  //   //fileToGenerativePart("image.jpg", "image/jpeg"),
-  //   imgBase64,
-  // ];
-
+  let imgBase64 = await downloadFile(postData.fileName)
   const result = await model.generateContent([
     prompt,
     postData.name,
@@ -40,8 +26,7 @@ export async function POST(request: Request) {
   const response = await result.response;
   const text = response.text();
   console.log(text);
-  //delete image
-  
+
   return NextResponse.json({ description: text });
 }
 
