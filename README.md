@@ -2,7 +2,9 @@
 
 
 
-# Launch a GKE Cluster
+# Deploy this demo
+
+## Launch the GKE Cluster
 
 ```sh
 gcloud compute....
@@ -20,4 +22,12 @@ helm ...
 
 Cloud Build
 
+```
+
+## Connect to the demo
+
+Get the IP address from the following command
+
+```sh
+kubectl get svc
 ```
