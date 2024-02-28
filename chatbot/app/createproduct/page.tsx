@@ -1,6 +1,16 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
+import weaviate from 'weaviate-ts-client';
+import Menu from "../components/Menu"
+
+const client = weaviate.client({
+  scheme: 'http',
+  host: 'http://34.68.107.174/',
+});
+
+
+
 
 const page = () => {
   const [file, setFile] = useState<File | undefined>();
@@ -54,8 +64,29 @@ const page = () => {
       });
   }
 
+  const createProduct = async()=>{
+
+    let itemDetails =
+      {
+          name: name,
+          itemDesc: itemDesc,
+     }
+
+  let   result = await client.data
+  .creator()
+  .withClassName('products')
+  .withProperties(itemDetails)
+  .do();
+
+console.log(JSON.stringify(result, null, 2)); 
+     
+
+
+
+  }
   return (
     <div className="pl-5">
+      <Menu />
       <h1 className="text-2xl">Product Page</h1>
       <div className="flex flex-col justify-between p-4 leading-normal">
         <form onSubmit={uploadImage}>
@@ -116,6 +147,12 @@ const page = () => {
             // @ts-ignore comment
             rows="6"
           ></textarea>
+ <button
+            type="submit"
+            onClick={createProduct}
+            className="bg-blue-500 text-white mb-2 mt-3 hover:bg-grey-300 ld py-2 px-4 rounded"
+          >Create Product</button>
+
         </div>
       </div>
     </div>
