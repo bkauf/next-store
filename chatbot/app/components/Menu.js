@@ -2,9 +2,9 @@ import React from 'react'
 import Link from "next/link";
 const Menu = () => {
   return (
-    <div>
-      <Link href="/createproduct" > Create Product </Link> |
-      <Link href="/products" > View Products </Link>
+    <div className="mb-2">
+      <Link href="/createproduct" ><span className="font-bold text-blue-600">Create Product</span> </Link> |
+      <Link href="/products" ><span className="font-bold text-blue-600"> View Products</span> </Link>
     </div>
   )
 }
