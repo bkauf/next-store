@@ -32,9 +32,10 @@ export default page;
 
 
 const client = weaviate.client({
-  scheme: 'http',
-  host: '${process.env.WEAVIATE_SERVER}',
-});
+    scheme: 'http',
+    host: `${process.env.WEAVIATE_SERVER}`,
+  });
+  
 
 
 
