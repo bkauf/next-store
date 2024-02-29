@@ -3,7 +3,7 @@ steps:
   - name: gcr.io/cloud-builders/gsutil
     args: ['cp', 'gs://$_BUCKET/*', './chatbot']
 
-  - id: "Create Container for chatbot dir"
+  - id: "Create Container"
     name: "gcr.io/cloud-builders/docker"
     args: ["build", "--tag=$_REPO_URL/$_PROJECT_ID/$_IMAGE_REPO/$_IMAGE_NAME:$SHORT_SHA", "./chatbot"]
    
