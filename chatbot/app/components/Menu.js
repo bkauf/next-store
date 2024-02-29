@@ -4,7 +4,7 @@ const Menu = () => {
   return (
     <div className="mb-2">
       <Link href="/createproduct" ><span className="font-bold text-blue-600">Create Product</span> </Link> |
-      <Link href="/products" ><span className="font-bold text-blue-600"> View Products</span> </Link>
+      <Link href="/" ><span className="font-bold text-blue-600"> View Products</span> </Link>
     </div>
   )
 }

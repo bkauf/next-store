@@ -1,6 +1,5 @@
 import weaviate from 'weaviate-ts-client';
 import React from "react";
-import Menu from "../components/Menu"
 
 
   
@@ -23,7 +22,7 @@ const page = async () => {
 
 
 return(
-<><Menu/>
+<>
 
     <div>
       <h1>Product List</h1>

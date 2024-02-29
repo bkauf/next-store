@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import weaviate from 'weaviate-ts-client';
-import Menu from "../components/Menu"
 
 const client = weaviate.client({
   scheme: 'http',
@@ -86,7 +85,7 @@ console.log(JSON.stringify(result, null, 2));
   }
   return (
     <div className="pl-5">
-      <Menu />
+   
       <h1 className="text-2xl">Product Page</h1>
       <div className="flex flex-col justify-between p-4 leading-normal">
         <form onSubmit={uploadImage}>
