@@ -16,4 +16,4 @@ steps:
   - id: 'Deploy to Hosted Cloud Run'
     name: 'gcr.io/cloud-builders/gcloud'
     args: ['run', 'deploy', '$_CLOUD_RUN', '--platform', 'managed','--region', 'us-central1', '--image', '$_REPO_URL/$_PROJECT_ID/$_IMAGE_REPO/$_IMAGE_NAME:$SHORT_SHA']
-    waitFor: ['Push to GCR Container Registry']
+    waitFor: ['Push to Container Registry']
