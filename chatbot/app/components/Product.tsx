@@ -3,33 +3,24 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 interface ProductObj {
-
-  productDesc: String,
-  name: String,
-  url: String,
-  id: String
+  productDesc: String;
+  name: String;
+  url: String;
+  id: String;
 }
 
-
-
-const Product = ({productObj}:{productObj : ProductObj}) => {
-
-  
+const Product = ({ productObj }: { productObj: ProductObj }) => {
   const [file, setFile] = useState<File | undefined>();
   const [image, setImage] = useState();
-  const[product, setProduct] = useState();
-  console.log("from component", productObj['name'])
+  const [product, setProduct] = useState();
   const [name, setName] = useState();
-  const [productDesc, setproductDesc] = useState(productObj.productDesc);
+  const [productDesc, setproductDesc] = useState();
   useEffect(() => {
-//@ts-ignore
-  setName(productObj.name);
-  setproductDesc(productObj.productDesc);
-    
+    //@ts-ignore
+    setName(productObj.name);
+    //@ts-ignore
+    setproductDesc(productObj.productDesc);
   }, [productObj]);
-
-
-
 
   function handleChange(e: React.FormEvent<HTMLInputElement>) {
     const target = e.target as HTMLInputElement & {
@@ -90,15 +81,14 @@ const Product = ({productObj}:{productObj : ProductObj}) => {
       });
   }
 
-  const deleteProduct =  () => {
-  
+  const deleteProduct = () => {
     axios
-      .delete("/api/weaviate?pid="+productObj.id )
+      .delete("/api/weaviate?pid=" + productObj.id)
       .then((response) => {
         // Handle successful response
         console.log("Response data:", response.data);
-      //  setProduct(response.data);
-       // window.location.href = '/';
+        //  setProduct(response.data);
+        // window.location.href = '/';
       })
       .catch((error) => {
         // Handle error
@@ -126,6 +116,7 @@ const Product = ({productObj}:{productObj : ProductObj}) => {
               Name:{" "}
               <input
                 className="bg-gray-100 p-1"
+                //@ts-ignore
                 onChange={(event) => setName(event.target.value)}
                 //@ts-ignore
                 value={name}
@@ -166,8 +157,8 @@ const Product = ({productObj}:{productObj : ProductObj}) => {
           </button>
 
           <textarea
-           // @ts-ignore comment
-            
+            // @ts-ignore comment
+
             value={productDesc}
             onChange={(event) => setproductDesc(event.target.value)}
             name="description"
@@ -188,19 +179,15 @@ const Product = ({productObj}:{productObj : ProductObj}) => {
           >
             Create Product
           </button>
-
-        
         </div>
-      
       </div>
       <button
-            type="submit"
-           
-            onClick={deleteProduct}
-            className="bg-red-500 text-white mb-2 mt-3 hover:bg-grey-300 py-2 px-4 rounded"
-          >
-            Delete Product
-          </button>
+        type="submit"
+        onClick={deleteProduct}
+        className="bg-red-500 text-white mb-2 mt-3 hover:bg-grey-300 py-2 px-4 rounded"
+      >
+        Delete Product
+      </button>
     </div>
   );
 };
