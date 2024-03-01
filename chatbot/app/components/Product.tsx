@@ -160,6 +160,7 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
             // @ts-ignore comment
 
             value={productDesc}
+            //@ts-ignore
             onChange={(event) => setproductDesc(event.target.value)}
             name="description"
             className="block p-2.5 w-full 
