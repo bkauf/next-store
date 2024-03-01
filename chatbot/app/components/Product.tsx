@@ -2,11 +2,25 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const page = () => {
+interface ProductObj {
+
+  productDesc: String,
+  name: String,
+  url: String,
+  id: String
+}
+
+
+
+const Product = ({productObj}:{productObj : ProductObj}) => {
+
+  
   const [file, setFile] = useState<File | undefined>();
   const [image, setImage] = useState();
-  const [name, setName] = useState("");
-  const [productDesc, setproductDesc] = useState("");
+  const[product, setProduct] = useState(productObj);
+  const [name, setName] = useState(productObj['name']);
+  const [productDesc, setproductDesc] = useState(productObj.productDesc);
+  console.log("from component", productObj['name'])
 
   function handleChange(e: React.FormEvent<HTMLInputElement>) {
     const target = e.target as HTMLInputElement & {
@@ -67,14 +81,15 @@ const page = () => {
       });
   }
 
-  const getProduct = async (productId) => {
+  const deleteProduct =  () => {
   
     axios
-      .get("/api/weaviate?pid=" + productId)
+      .delete("/api/weaviate?pid="+productObj.id )
       .then((response) => {
         // Handle successful response
         console.log("Response data:", response.data);
-        setProduct(response.data);
+      //  setProduct(response.data);
+       // window.location.href = '/';
       })
       .catch((error) => {
         // Handle error
@@ -103,6 +118,8 @@ const page = () => {
               <input
                 className="bg-gray-100 p-1"
                 onChange={(event) => setName(event.target.value)}
+                //@ts-ignore
+                value={name}
               />
             </li>
             <li>
@@ -140,6 +157,7 @@ const page = () => {
           </button>
 
           <textarea
+           // @ts-ignore comment
             value={productDesc}
             onChange={(event) => setproductDesc(event.target.value)}
             name="description"
@@ -160,10 +178,21 @@ const page = () => {
           >
             Create Product
           </button>
+
+        
         </div>
+      
       </div>
+      <button
+            type="submit"
+           
+            onClick={deleteProduct}
+            className="bg-red-500 text-white mb-2 mt-3 hover:bg-grey-300 py-2 px-4 rounded"
+          >
+            Delete Product
+          </button>
     </div>
   );
 };
 
-export default page;
+export default Product;
