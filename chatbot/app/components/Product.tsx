@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 interface ProductObj {
@@ -17,10 +17,19 @@ const Product = ({productObj}:{productObj : ProductObj}) => {
   
   const [file, setFile] = useState<File | undefined>();
   const [image, setImage] = useState();
-  const[product, setProduct] = useState(productObj);
-  const [name, setName] = useState(productObj['name']);
-  const [productDesc, setproductDesc] = useState(productObj.productDesc);
+  const[product, setProduct] = useState();
   console.log("from component", productObj['name'])
+  const [name, setName] = useState();
+  const [productDesc, setproductDesc] = useState(productObj.productDesc);
+  useEffect(() => {
+//@ts-ignore
+  setName(productObj.name);
+  setproductDesc(productObj.productDesc);
+    
+  }, [productObj]);
+
+
+
 
   function handleChange(e: React.FormEvent<HTMLInputElement>) {
     const target = e.target as HTMLInputElement & {
@@ -158,6 +167,7 @@ const Product = ({productObj}:{productObj : ProductObj}) => {
 
           <textarea
            // @ts-ignore comment
+            
             value={productDesc}
             onChange={(event) => setproductDesc(event.target.value)}
             name="description"

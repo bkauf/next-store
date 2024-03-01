@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 
-const page = async () => {
+const page = () => {
   const [productsAry, setproductsAry] = useState([]);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const page = async () => {
                   <li key={index} className="mt-2">
                     <Link href={"/product/?id=" + product._additional.id}>
                       <span className="text-lg font-bold">{product.name}</span>
-                      <p>{product.itemDesc}</p>
+                      <p>{product.productDesc}</p>
                     </Link>
                   </li>
                 ))

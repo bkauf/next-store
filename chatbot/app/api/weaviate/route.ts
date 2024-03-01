@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
   let result = await client.data
     .creator()
-    .withClassName("products")
+    .withClassName("Products")
     .withProperties(itemDetails)
     .do()
     .then((res) => {

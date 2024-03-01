@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   let result = await client.graphql
   .get()
   .withClassName("Products")
-  .withFields("name itemDesc  _additional { id }")
+  .withFields("name productDesc  _additional { id }")
   .do();
 
   console.log(result.data.Get.Products);
