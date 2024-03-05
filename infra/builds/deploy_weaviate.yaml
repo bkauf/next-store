@@ -1,0 +1,16 @@
+timeout: 14400s # 2hr
+substitutions:
+  _PROJECT_ID: $PROJECT_ID
+tags:
+  - deploy-weaviate
+steps:
+- id: "Install Weaviate Helm Chart"
+  name: 'gcr.io/$_PROJECT_ID/helm:latest'
+  args: ['upgrade', '--install', 'weaviate', 'weaviate/weaviate', '--namespace', 'weaviate', '--create-namespace']
+  env:
+    - HELM_REPO_NAME=weaviate
+    - HELM_REPO_URL=https://weaviate.github.io/weaviate-helm
+    - CLOUDSDK_COMPUTE_REGION=$_REGION
+    - CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME
+    - GCLOUD_PROJECT=$_PROJECT_ID
+

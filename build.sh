@@ -18,7 +18,7 @@ usage()
    exit 1 # Exit script after printing help
 }
 
-terraform_destroy()
+destroy()
 {
     echo -e "\e[95mSetting DESTROY var to 'true'...\e[0m"
     DESTROY=true
@@ -26,12 +26,16 @@ terraform_destroy()
 
 # Setting default value
 unset DESTROY
+REGION=us-central1
 
 # Define bash args
 while [ "$1" != "" ]; do
     case $1 in
+        --region | -r )        shift
+                                REGION=$1
+                                ;;
         --destroy | -d )      shift
-                                terraform_destroy
+                                destroy
                                 ;;
         --help | -h )           usage
                                 exit
@@ -43,6 +47,8 @@ done
 [[ ! "${PROJECT_ID}" ]] && echo -e "Please export PROJECT_ID variable (\e[95mexport PROJECT_ID=<YOUR PROJECT ID>\e[0m)\nExiting." && exit 0
 echo -e "\e[95mPROJECT_ID is set to ${PROJECT_ID}\e[0m"
 gcloud config set core/project ${PROJECT_ID}
+echo -e "\e[95mREGION is set to ${REGION}\e[0m"
+
 
 # Enable Cloudbuild API
 echo -e "\e[95mEnabling Cloudbuild API in ${PROJECT_ID}\e[0m"
@@ -55,12 +61,21 @@ export PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format 'value(p
 gcloud projects add-iam-policy-binding ${PROJECT_ID} --member serviceAccount:${PROJECT_NUMBER}@cloudbuild.gserviceaccount.com --role roles/owner
 
 # Create GCS Bucket for terraform state
-echo -e "\e[95mCreating GCS Bucket called ${PROJECT_ID} to store terraform state files.\e[0m"
-gsutil mb -p ${PROJECT_ID} gs://${PROJECT_ID} && gsutil versioning set on gs://${PROJECT_ID}
+[[ "${DESTROY}" != "true" ]] && 
+echo -e "\e[95mCreating GCS Bucket called ${PROJECT_ID} to store terraform state files.\e[0m" && \
+      ([[ $(gsutil ls | grep "gs://${_PROJECT_ID}/") ]] || \
+      gsutil mb -p ${PROJECT_ID} gs://${_PROJECT_ID}) && \
+      ([[ $(gsutil versioning get gs://${PROJECT_ID} | grep Enabled) ]] || \
+      gsutil versioning set on gs://${PROJECT_ID}) 
 
-# # Start main build
-# [[ "${DESTROY}" == "true" ]] &&  echo -e "\e[95mStarting Cloudbuild to DELETE infrastructure using ${BUILD}...\e[0m"
+# Create HELM BUILDER
+[[ "${DESTROY}" != "true" ]] && echo -e "\e[95mCreating Helm Builder...\e[0m" && gcloud builds submit --config=infra/builds/build_helm_builder.yaml --substitutions=_PROJECT_ID=${PROJECT_ID}
 
-# [[ "${DESTROY}" != "true" ]] && gcloud builds submit --config=builds/infra_terraform.yaml --substitutions=_PROJECT_ID=${PROJECT_ID} --async
+# Start terraform 
+[[ "${DESTROY}" != "true" ]] &&  echo -e "\e[95mStarting Terraform to CREATE infrastructure...\e[0m" && gcloud builds submit --config=infra/builds/create_infra_terraform.yaml --substitutions=_PROJECT_ID=${PROJECT_ID},_REGION=${REGION}
 
-# echo -e "\e[95mYou can view the Cloudbuild status through https://console.cloud.google.com/cloud-build\e[0m"
+# Install WEAVIATE HELM CHART
+[[ "${DESTROY}" != "true" ]] && echo -e "\e[95mDeploy Weaviate Helm Chart...\e[0m" && gcloud builds submit --config=infra/builds/deploy_weaviate.yaml --substitutions=_PROJECT_ID=${PROJECT_ID},_REGION=${REGION},_CLUSTER_NAME=cluster-${PROJECT_ID}
+
+# Create and deploy chatbot
+[[ "${DESTROY}" != "true" ]] && echo -e "\e[95mDeploy ChatBot...\e[0m" && gcloud builds submit --config=infra/builds/deploy_chatbot.yaml --substitutions=_PROJECT_ID=${PROJECT_ID},_REGION=${REGION},_CLUSTER_NAME=cluster-${PROJECT_ID},_REPO_URL=${REGION}-docker.pkg.dev

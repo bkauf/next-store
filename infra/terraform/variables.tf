@@ -8,7 +8,7 @@ variable "network_name" {
 }
 
 variable "region" {
-  description = ""
+  description = "The region of the GKE cluster and VPC"
 }
 
 
