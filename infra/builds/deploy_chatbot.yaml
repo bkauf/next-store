@@ -5,15 +5,29 @@ substitutions:
   _IMAGE_REPO: demo
   _IMAGE_NAME: nextjs-ai-store   
 tags:
-  - deploy-chatbot
+  - build-and-deploy-chatbot
 steps:
-#get environment variables file
-  - name: gcr.io/cloud-builders/gsutil
-    args: ['cp', 'gs://$_BUCKET/*', './chatbot']
+  #get environment variables file
+  - id: "Create workspace folder"
+    name: gcr.io/cloud-builders/gcloud
+    entrypoint: bash
+    args: 
+      - -c
+      - |
+        mkdir /workspace/bucket_files
+
+  - id: "Move secrets to workspace"
+    name: gcr.io/cloud-builders/gsutil
+    args: ['cp', 'gs://$_BUCKET/*', '/workspace/bucket_files']
 
   - id: "Create Container"
     name: "gcr.io/cloud-builders/docker"
-    args: ["build", "--tag=$_REPO_URL/$_PROJECT_ID/$_IMAGE_REPO/$_IMAGE_NAME:$BUILD_ID", "chatbot"]
+    entrypoint: bash
+    args: 
+      - -c
+      - |
+        cp /workspace/bucket_files/* chatbot && \    
+        docker build --tag=$_REPO_URL/$_PROJECT_ID/$_IMAGE_REPO/$_IMAGE_NAME:$BUILD_ID chatbot
    
 
   - id: "Push to Container Registry"

@@ -24,8 +24,15 @@ destroy()
     DESTROY=true
 }
 
+quick()
+{
+    echo -e "\e[95mSetting QUICK var to 'false'...\e[0m"
+    QUICK=true
+}
+
 # Setting default value
 unset DESTROY
+unset QUICK
 REGION=us-central1
 
 # Define bash args
@@ -36,6 +43,9 @@ while [ "$1" != "" ]; do
                                 ;;
         --destroy | -d )      shift
                                 destroy
+                                ;;
+        --quick | -q )          shift
+                                quick
                                 ;;
         --help | -h )           usage
                                 exit
@@ -61,7 +71,8 @@ export PROJECT_NUMBER=$(gcloud projects describe ${PROJECT_ID} --format 'value(p
 gcloud projects add-iam-policy-binding ${PROJECT_ID} --member serviceAccount:${PROJECT_NUMBER}@cloudbuild.gserviceaccount.com --role roles/owner
 
 # Create GCS Bucket for terraform state
-[[ "${DESTROY}" != "true" ]] && 
+[[ "${DESTROY}" != "true" ]] && \
+[[ "${QUICK}" != "true" ]] && \
 echo -e "\e[95mCreating GCS Bucket called ${PROJECT_ID} to store terraform state files.\e[0m" && \
       ([[ $(gsutil ls | grep "gs://${_PROJECT_ID}/") ]] || \
       gsutil mb -p ${PROJECT_ID} gs://${_PROJECT_ID}) && \
@@ -69,7 +80,9 @@ echo -e "\e[95mCreating GCS Bucket called ${PROJECT_ID} to store terraform state
       gsutil versioning set on gs://${PROJECT_ID}) 
 
 # Create HELM BUILDER
-[[ "${DESTROY}" != "true" ]] && echo -e "\e[95mCreating Helm Builder...\e[0m" && gcloud builds submit --config=infra/builds/build_helm_builder.yaml --substitutions=_PROJECT_ID=${PROJECT_ID}
+[[ "${DESTROY}" != "true" ]] && \
+[[ "${QUICK}" != "true" ]] && \
+echo -e "\e[95mCreating Helm Builder...\e[0m" && gcloud builds submit --config=infra/builds/build_helm_builder.yaml --substitutions=_PROJECT_ID=${PROJECT_ID}
 
 # Start terraform 
 [[ "${DESTROY}" != "true" ]] &&  echo -e "\e[95mStarting Terraform to CREATE infrastructure...\e[0m" && gcloud builds submit --config=infra/builds/create_infra_terraform.yaml --substitutions=_PROJECT_ID=${PROJECT_ID},_REGION=${REGION}
@@ -78,4 +91,4 @@ echo -e "\e[95mCreating GCS Bucket called ${PROJECT_ID} to store terraform state
 [[ "${DESTROY}" != "true" ]] && echo -e "\e[95mDeploy Weaviate Helm Chart...\e[0m" && gcloud builds submit --config=infra/builds/deploy_weaviate.yaml --substitutions=_PROJECT_ID=${PROJECT_ID},_REGION=${REGION},_CLUSTER_NAME=cluster-${PROJECT_ID}
 
 # Create and deploy chatbot
-[[ "${DESTROY}" != "true" ]] && echo -e "\e[95mDeploy ChatBot...\e[0m" && gcloud builds submit --config=infra/builds/deploy_chatbot.yaml --substitutions=_PROJECT_ID=${PROJECT_ID},_REGION=${REGION},_CLUSTER_NAME=cluster-${PROJECT_ID},_REPO_URL=${REGION}-docker.pkg.dev
+[[ "${DESTROY}" != "true" ]] && echo -e "\e[95mDeploy ChatBot...\e[0m" && gcloud builds submit --config=infra/builds/deploy_chatbot.yaml --substitutions=_PROJECT_ID=${PROJECT_ID},_REPO_URL=${REGION}-docker.pkg.dev
