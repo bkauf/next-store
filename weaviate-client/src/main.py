@@ -1,15 +1,13 @@
 import weaviate
 from weaviate.connect import ConnectionParams
 import weaviate.classes as wvc
-import weaviate
 from weaviate.auth import AuthApiKey
-
-
 import os
 
 
 WEAVIATE_HTTP_URL = os.getenv("WEAVIATE_HTTP_URL")
 WEAVIATE_GRPC_URL = os.getenv("WEAVIATE_GRPC_URL")
+WEAVIATE_API_KEY = os.getenv("WEAVIATE_API_KEY")
 
 # https://weaviate.io/developers/weaviate/client-libraries/python#python-client-v4-explicit-connection
 client = weaviate.WeaviateClient(
@@ -21,6 +19,7 @@ client = weaviate.WeaviateClient(
         grpc_port="50051",
         grpc_secure=False,
     ),
+    auth_client_secret=AuthApiKey(WEAVIATE_API_KEY)
 )
 
 try:
