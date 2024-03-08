@@ -18,7 +18,7 @@ steps:
 
   - id: "Move secrets to workspace"
     name: gcr.io/cloud-builders/gsutil
-    args: ['cp', 'gs://$_BUCKET/*', '/workspace/bucket_files']
+    args: ['cp', 'gs://$_BUCKET/*', 'chatbot']
 
   - id: "Create Container"
     name: "gcr.io/cloud-builders/docker"
@@ -26,10 +26,8 @@ steps:
     args: 
       - -c
       - |
-        cp /workspace/bucket_files/* chatbot && \    
         docker build --tag=$_REPO_URL/$_PROJECT_ID/$_IMAGE_REPO/$_IMAGE_NAME:$BUILD_ID chatbot
    
-
   - id: "Push to Container Registry"
     name: "gcr.io/cloud-builders/docker"
     args: ["push", "$_REPO_URL/$_PROJECT_ID/$_IMAGE_REPO/$_IMAGE_NAME:$BUILD_ID"]
