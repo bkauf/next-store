@@ -7,7 +7,7 @@ tags:
 steps:
 - id: "Install Weaviate Helm Chart"
   name: 'gcr.io/$_PROJECT_ID/helm:latest'
-  args: ['upgrade', '--install', 'weaviate', 'weaviate/weaviate','-f', 'weaviate/next-values.yaml','--set', 'text2vec-palm.apiKey=$_PALM_API_KEY','--set', 'generative-palm.apiKey=$_PALM_API_KEY','--namespace', 'weaviate', '--create-namespace']
+  args: ['upgrade', '--install', 'weaviate', 'weaviate/weaviate','-f', 'weaviate/demo-values.yaml','--set', 'modules.generative-palm.apiKey=$_PALM_API_KEY','--set', 'modules.text2vec-palm.apiKey=$_PALM_API_KEY','--namespace', 'weaviate', '--create-namespace']
   env:
     - HELM_REPO_NAME=weaviate
     - HELM_REPO_URL=https://weaviate.github.io/weaviate-helm

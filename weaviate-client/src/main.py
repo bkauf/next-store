@@ -1,6 +1,10 @@
 import weaviate
 from weaviate.connect import ConnectionParams
 import weaviate.classes as wvc
+import weaviate
+from weaviate.auth import AuthApiKey
+
+
 import os
 
 
@@ -16,7 +20,8 @@ client = weaviate.WeaviateClient(
         grpc_host=WEAVIATE_GRPC_URL,
         grpc_port="50051",
         grpc_secure=False,
-    ))
+    ),
+)
 
 try:
     client.connect()
