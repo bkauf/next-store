@@ -25,7 +25,7 @@ Run the install script to install the infrastructure (GKE cluster, artifact regi
 ```
 
 ## Build and deploy the application to the cluster
-This command will build the chatbot and deploy it to CloudRun.
+This command will build the chatbot and deploy it to the GKE cluster.
 
 ```sh
 ./install.sh --app
@@ -36,7 +36,7 @@ This command will build the chatbot and deploy it to CloudRun.
 ```sh
 gcloud container clusters get-credentials cluster-${PROJECT_ID} --region $REGION --project ${PROJECT_ID}
 ```
-We need to create an API key and attach it as a secret to the weaviate server so that only authorized users can connect to the weaviate server.
+We need to create an API key and attach it as a secret to the weaviate server we just deployed so that only authorized users can connect to the weaviate server.
 
 ```sh
 kubectl create secret generic user-keys \
