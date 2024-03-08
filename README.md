@@ -40,7 +40,8 @@ We need to create an API key and attach it as a secret to the weaviate server so
 
 ```sh
 kubectl create secret generic user-keys \
---from-literal=AUTHENTICATION_APIKEY_ALLOWED_KEYS=$WEAVIATE_API_KEY
+--from-literal=AUTHENTICATION_APIKEY_ALLOWED_KEYS=$WEAVIATE_API_KEY \
+-n weaviate
 ``` 
 Get the external IP addresses of the grpc and http services
 
