@@ -5,6 +5,10 @@
 replicaCount: 1
 
 image:
+<<<<<<< HEAD
+=======
+  repository: nginx
+>>>>>>> 9f55b9cdfae1c82e3902b8b477bf80b9334fe5ad
   pullPolicy: Always
   tag: "latest"
 
