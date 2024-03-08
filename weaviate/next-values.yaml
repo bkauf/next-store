@@ -11,11 +11,3 @@ text2vec-palm:
   enabled: true
 generative-palm:
   enabled: true
-# env:
-#   AUTHENTICATION_APIKEY_ENABLED: 'true'
-#   AUTHENTICATION_APIKEY_ALLOWED_KEYS: 'jane-secret-key,ian-secret-key' 
-#   AUTHENTICATION_APIKEY_USERS: 'jane@doe.com' # does not exist
-
-# envSecrets:
-#   # create a Kubernetes secret with AUTHENTICATION_APIKEY_ALLOWED_KEYS key and its respective value
-#   AUTHENTICATION_APIKEY_ALLOWED_KEYS: weaviate-api-key

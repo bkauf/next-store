@@ -1,5 +1,5 @@
 resource "google_artifact_registry_repository" "repo" {
-  location      = "us-central1"
+  location      = var.region
   repository_id = "demo"
   description   = "docker repository for Next demo"
   format        = "DOCKER"
