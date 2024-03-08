@@ -109,4 +109,4 @@ gcloud builds submit --config=infra/builds/deploy_weaviate.yaml \
 [[ "${DESTROY}" != "true" ]] && \
 [[ "${APPLICATION}" == "true" ]] && \
 echo -e "\e[95mDeploy ChatBot...\e[0m" && \
-gcloud builds submit --config=infra/builds/deploy_chatbot.yaml --substitutions=_PROJECT_ID=${PROJECT_ID},_REPO_URL=${REGION}-docker.pkg.dev
+gcloud builds submit --config=infra/builds/deploy_chatbot.yaml --substitutions=_PROJECT_ID=${PROJECT_ID},_REGION=${REGION},_REPO_URL=${REGION}-docker.pkg.dev,_CLUSTER_NAME=cluster-${PROJECT_ID}
