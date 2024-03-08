@@ -8,11 +8,11 @@ import client from "@/app/lib/weaviate-client";
 /* Function to get all products */
 
 export async function GET(request: NextRequest) {
-
   let result = await client.graphql
   .get()
   .withClassName("Products")
-  .withFields("name productDesc  _additional { id }")
+  .withFields("name description  _additional { id }")
+  .withLimit(50)
   .do();
 
   console.log(result.data.Get.Products);

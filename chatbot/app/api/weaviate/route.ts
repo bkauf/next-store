@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
 
   let itemDetails = {
     name: productName,
-    productDesc: productDesc,
+    description: productDesc,
   };
 
   let result = await client.data
@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
 /* Function to get a product */
 
 export async function GET(request: NextRequest) {
+  console.log("get product")
   const productId = request.nextUrl.searchParams.get("pid");
 
   let result = await client.data
@@ -41,7 +42,7 @@ export async function GET(request: NextRequest) {
     .withId(productId)
     .do()
     .catch((error) => {
-      console.error(error);
+      console.error("error1", error);
     });
   if (result) {
     return NextResponse.json(result.properties);

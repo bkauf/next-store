@@ -42,16 +42,23 @@ const page = () => {
       <div>
         <h1>Product List</h1>
 
-        {productsAry.length > 1 ? (
+        {productsAry.length >= 1 ? (
           <>
             <ul className="w-1/2">
               {
                 // @ts-ignore
                 productsAry.map((product, index) => (
                   <li key={index} className="mt-2">
-                    <Link href={"/product/?id=" + product._additional.id}>
-                      <span className="text-lg font-bold">{product.name}</span>
-                      <p>{product.productDesc}</p>
+                  
+                    <Link href={
+                      // @ts-ignore
+                      "/product/?id=" + product._additional.id}>
+                      <span className="text-lg font-bold">{
+                      // @ts-ignore
+                      product.name}</span>
+                      <p>{
+                      // @ts-ignore
+                      product.description}</p>
                     </Link>
                   </li>
                 ))
@@ -59,7 +66,7 @@ const page = () => {
             </ul>
           </>
         ) : (
-          <>not</>
+        null
         )}
       </div>
     </>

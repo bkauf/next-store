@@ -6,6 +6,7 @@ const page = () => {
   const [file, setFile] = useState<File | undefined>();
   const [image, setImage] = useState();
   const [name, setName] = useState("");
+  const [product, setProduct] = useState("");
   const [productDesc, setproductDesc] = useState("");
 
   function handleChange(e: React.FormEvent<HTMLInputElement>) {
@@ -67,7 +68,7 @@ const page = () => {
       });
   }
 
-  const getProduct = async (productId) => {
+  const getProduct = async (productId : any) => {
   
     axios
       .get("/api/weaviate?pid=" + productId)

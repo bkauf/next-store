@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 interface ProductObj {
-  productDesc: String;
+  description: String;
   name: String;
   url: String;
   id: String;
@@ -12,14 +12,14 @@ interface ProductObj {
 const Product = ({ productObj }: { productObj: ProductObj }) => {
   const [file, setFile] = useState<File | undefined>();
   const [image, setImage] = useState();
-  const [product, setProduct] = useState();
-  const [name, setName] = useState();
-  const [productDesc, setproductDesc] = useState();
+  const [product, setProduct] = useState({});
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   useEffect(() => {
     //@ts-ignore
     setName(productObj.name);
     //@ts-ignore
-    setproductDesc(productObj.productDesc);
+    setDescription(productObj.description);
   }, [productObj]);
 
   function handleChange(e: React.FormEvent<HTMLInputElement>) {
@@ -61,7 +61,7 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
       .post("/api/gemini", data, { headers })
       .then((response) => {
         console.log(response.data); // Contains the response from the server
-        setproductDesc(response.data.description);
+        setDescription(response.data.description);
       })
       .catch((error) => {
         console.error(error);
@@ -71,7 +71,7 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
     axios
       .post("/api/weaviate", {
         productName: name,
-        productDesc: productDesc,
+        productDesc: description,
       })
       .then(function (response) {
         console.log(response);
@@ -159,9 +159,9 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
           <textarea
             // @ts-ignore comment
 
-            value={productDesc}
+            value={description}
             //@ts-ignore
-            onChange={(event) => setproductDesc(event.target.value)}
+            onChange={(event) => setDescription(event.target.value)}
             name="description"
             className="block p-2.5 w-full 
                 text-gray-900 bg-gray-50 
