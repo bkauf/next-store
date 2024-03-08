@@ -4,8 +4,8 @@ import weaviate.classes as wvc
 import os
 
 
-WEAVIATE_HTTP_URL = os.getenv("WEAVIATE_HTTP_URL", "34.30.108.185") # will remove from repo later
-WEAVIATE_GRPC_URL = os.getenv("WEAVIATE_GRPC_URL", "34.133.233.221") # will remove from repo later
+WEAVIATE_HTTP_URL = os.getenv("WEAVIATE_HTTP_URL")
+WEAVIATE_GRPC_URL = os.getenv("WEAVIATE_GRPC_URL")
 
 # https://weaviate.io/developers/weaviate/client-libraries/python#python-client-v4-explicit-connection
 client = weaviate.WeaviateClient(
