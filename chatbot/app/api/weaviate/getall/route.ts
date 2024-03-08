@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 const https = require("https");
 import client from "@/app/lib/weaviate-client";
-
+export const dynamic = 'force-dynamic'
 
 
 
