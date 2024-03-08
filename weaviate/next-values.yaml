@@ -1,4 +1,4 @@
-# FROM https://github.com/weaviate/weaviate-helm/blob/master/weaviate/values.yaml
+# Default values @ https://github.com/weaviate/weaviate-helm/blob/master/weaviate/values.yaml
 grpcService:
   enabled: true
   name: weaviate-grpc
@@ -7,7 +7,10 @@ grpcService:
       protocol: TCP
       port: 50051
   type: LoadBalancer
-
+text2vec-palm:
+  enabled: true
+generative-palm:
+  enabled: true
 # env:
 #   AUTHENTICATION_APIKEY_ENABLED: 'true'
 #   AUTHENTICATION_APIKEY_ALLOWED_KEYS: 'jane-secret-key,ian-secret-key' 

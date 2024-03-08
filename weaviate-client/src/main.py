@@ -4,8 +4,8 @@ import weaviate.classes as wvc
 import os
 
 
-WEAVIATE_HTTP_URL = os.getenv("WEAVIATE_HTTP_URL", "34.133.233.221") # will remove from repo later
-WEAVIATE_GRPC_URL = os.getenv("WEAVIATE_GRPC_URL", "34.134.149.123") # will remove from repo later
+WEAVIATE_HTTP_URL = os.getenv("WEAVIATE_HTTP_URL", "34.30.108.185") # will remove from repo later
+WEAVIATE_GRPC_URL = os.getenv("WEAVIATE_GRPC_URL", "34.133.233.221") # will remove from repo later
 
 # https://weaviate.io/developers/weaviate/client-libraries/python#python-client-v4-explicit-connection
 client = weaviate.WeaviateClient(
@@ -22,7 +22,7 @@ try:
     client.connect()
     client.collections.create(
         "Article",
-        properties=[  # properties configuration is optional
+        properties=[ 
             wvc.config.Property(name="title", data_type=wvc.config.DataType.TEXT),
             wvc.config.Property(name="body", data_type=wvc.config.DataType.TEXT),
         ]
