@@ -11,7 +11,7 @@ interface ProductObj {
 
 const Product = ({ productObj }: { productObj: ProductObj }) => {
   const [file, setFile] = useState<File | undefined>();
-  const [image, setImage] = useState();
+  const [image, setImage] = useState("");
   const [product, setProduct] = useState({});
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -75,6 +75,7 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
       })
       .then(function (response) {
         console.log(response);
+        window.location.href = "/";
       })
       .catch(function (error) {
         console.log(error);
@@ -87,8 +88,8 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
       .then((response) => {
         // Handle successful response
         console.log("Response data:", response.data);
-        //  setProduct(response.data);
-        // window.location.href = '/';
+
+        window.location.href = "/";
       })
       .catch((error) => {
         // Handle error

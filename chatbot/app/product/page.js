@@ -8,7 +8,10 @@ const page = ({ searchParams }) => {
   const [product, setProduct] = useState({});
 
   useEffect(() => {
-    getProduct(productId);
+   
+      getProduct(productId);
+   
+   
   }, []);
 
   const getProduct = async (productId) => {
