@@ -24,7 +24,7 @@ module "gke" {
       name               = "default-pool"
       machine_type       = "e2-medium"
       autoscaling        = false
-      node_count = 9
+      node_count = 1
       disk_size_gb       = 10
       service_account    = google_service_account.gke_sa.email
     },
