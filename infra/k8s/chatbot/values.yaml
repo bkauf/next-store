@@ -12,6 +12,9 @@ imagePullSecrets: []
 
 service:
   port: 80
+  targetPort: 3000
 
+weaviate:
+  server: weaviate.weaviate.pod.cluster.local
 
 

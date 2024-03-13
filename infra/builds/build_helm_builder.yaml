@@ -10,5 +10,4 @@ steps:
 images:
   - 'gcr.io/$_PROJECT_ID/helm:${_HELM_VERSION}'
   - 'gcr.io/$_PROJECT_ID/helm:latest'
-tags: ['cloud-builders-community']
   

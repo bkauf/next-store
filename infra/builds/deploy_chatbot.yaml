@@ -4,7 +4,6 @@ substitutions:
   _BUCKET: next24-demo-secrets
   _IMAGE_REPO: demo
   _IMAGE_NAME: nextjs-ai-store   
-  _BUILD_ID: latest
   
 tags:
   - build-and-deploy-chatbot
@@ -19,11 +18,11 @@ steps:
     args: 
       - -c
       - |
-        docker build --tag=$_REPO_URL/$_PROJECT_ID/$_IMAGE_REPO/$_IMAGE_NAME:$SHORT_SHA chatbot
+        docker build --tag=$_REPO_URL/$_PROJECT_ID/$_IMAGE_REPO/$_IMAGE_NAME:latest chatbot
    
   - id: "Push to Container Registry"
     name: "gcr.io/cloud-builders/docker"
-    args: ["push", "$_REPO_URL/$_PROJECT_ID/$_IMAGE_REPO/$_IMAGE_NAME:$SHORT_SHA"]
+    args: ["push", "$_REPO_URL/$_PROJECT_ID/$_IMAGE_REPO/$_IMAGE_NAME:latest"]
     waitFor: ["Create Container"]
 
   - id: "Install Chatbot Helm Chart"

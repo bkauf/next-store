@@ -7,9 +7,18 @@ resource "google_service_account" "gke_sa" {
   project      = var.project_id
 }
 
-resource "google_project_iam_binding" "project" {
+resource "google_project_iam_binding" "metric_writer" {
   project = var.project_id
   role    = "roles/monitoring.metricWriter"
+
+  members = [
+    "serviceAccount:${google_service_account.gke_sa.email}",
+  ]
+}
+
+resource "google_project_iam_binding" "artifact_registry_reader" {
+  project = var.project_id
+  role    = "roles/artifactregistry.reader"
 
   members = [
     "serviceAccount:${google_service_account.gke_sa.email}",
@@ -42,6 +51,7 @@ module "gke" {
     all = [
       "https://www.googleapis.com/auth/logging.write",
       "https://www.googleapis.com/auth/monitoring",
+      "https://www.googleapis.com/auth/cloud-platform",
     ]
   }
 
