@@ -92,11 +92,13 @@ echo -e "\e[95mCreating GCS Bucket called ${PROJECT_ID} to store terraform state
 echo -e "\e[95mCreating Helm Builder...\e[0m" && \
 gcloud builds submit --config=infra/builds/build_helm_builder.yaml --substitutions=_PROJECT_ID=${PROJECT_ID}
 
+
 # Start terraform 
 [[ "${DESTROY}" != "true" ]] && \
 [[ "${APPLICATION}" != "true" ]] && \
  echo -e "\e[95mStarting Terraform to CREATE infrastructure...\e[0m" && \
  gcloud builds submit --config=infra/builds/create_infra_terraform.yaml --substitutions=_PROJECT_ID=${PROJECT_ID},_REGION=${REGION}
+
 
 # Install WEAVIATE HELM CHART
 [[ "${DESTROY}" != "true" ]] && \
@@ -109,4 +111,4 @@ gcloud builds submit --config=infra/builds/deploy_weaviate.yaml \
 [[ "${DESTROY}" != "true" ]] && \
 [[ "${APPLICATION}" == "true" ]] && \
 echo -e "\e[95mDeploy ChatBot...\e[0m" && \
-gcloud builds submit --config=infra/builds/deploy_chatbot.yaml --substitutions=_PROJECT_ID=${PROJECT_ID},_REGION=${REGION},_REPO_URL=${REGION}-docker.pkg.dev,_CLUSTER_NAME=cluster-${PROJECT_ID}
+gcloud builds submit --config=infra/builds/deploy_chatbot.yaml --substitutions=_PROJECT_ID=${PROJECT_ID},_REGION=${REGION},_CLUSTER_NAME=cluster-${PROJECT_ID},_REPO_URL=${REGION}-docker.pkg.dev

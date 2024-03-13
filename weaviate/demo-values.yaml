@@ -1,4 +1,8 @@
 # Default values @ https://github.com/weaviate/weaviate-helm/blob/master/weaviate/values.yaml
+image:
+  registry: cr.weaviate.io
+  tag: 1.24.2
+
 grpcService:
   enabled: true
   name: weaviate-grpc
@@ -25,3 +29,6 @@ modules:
     enabled: true
   generative-palm:
     enabled: true
+
+storage:
+  storageClassName: 'regional-pd'

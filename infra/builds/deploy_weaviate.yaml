@@ -5,6 +5,14 @@ substitutions:
 tags:
   - deploy-weaviate
 steps:
+- id: "Install regional PD storage class"
+  name: "gcr.io/cloud-builders/gke-deploy"
+  args:
+  - run
+  - --filename=weaviate/storage-class.yaml
+  - --location=$_REGION
+  - --cluster=$_CLUSTER_NAME
+
 - id: "Install Weaviate Helm Chart"
   name: 'gcr.io/$_PROJECT_ID/helm:latest'
   args: ['upgrade', '--install', 'weaviate', 'weaviate/weaviate','-f', 'weaviate/demo-values.yaml','--set', 'modules.generative-palm.apiKey=$_PALM_API_KEY','--set', 'modules.text2vec-palm.apiKey=$_PALM_API_KEY','--namespace', 'weaviate', '--create-namespace']
@@ -14,4 +22,3 @@ steps:
     - CLOUDSDK_COMPUTE_REGION=$_REGION
     - CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME
     - GCLOUD_PROJECT=$_PROJECT_ID
-

@@ -1,1 +1,0 @@
-# Sample website app

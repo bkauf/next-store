@@ -7,6 +7,14 @@ resource "google_service_account" "gke_sa" {
   project      = var.project_id
 }
 
+resource "google_project_iam_binding" "project" {
+  project = var.project_id
+  role    = "roles/monitoring.metricWriter"
+
+  members = [
+    "serviceAccount:${google_service_account.gke_sa.email}",
+  ]
+}
 module "gke" {
   source              = "terraform-google-modules/kubernetes-engine/google//modules/beta-public-cluster"
   version             = "30.1.0"
@@ -52,3 +60,4 @@ module "gke" {
     ]
   }
 }
+
