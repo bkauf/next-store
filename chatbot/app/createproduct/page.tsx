@@ -6,7 +6,7 @@ import Product from "@/app/components/Product";
 interface ProductObj {
   description: String;
   name: String;
-  url: String;
+  image: String;
   id: String;
 }
 

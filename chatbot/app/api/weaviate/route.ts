@@ -6,12 +6,14 @@ import client from "@/app/lib/weaviate-client";
 export async function POST(request: NextRequest) {
   const postData = await request.json(); // get request body
 
-  const productName = postData.productName;
-  const productDesc = postData.productDesc;
+  const name = postData.name;
+  const description = postData.description;
+  const filename = postData.filename;
 
   let itemDetails = {
-    name: productName,
-    description: productDesc,
+    name: name,
+    description: description,
+    filename: filename,
   };
 
   let result = await client.data
@@ -32,7 +34,7 @@ export async function POST(request: NextRequest) {
 /* Function to get a product */
 
 export async function GET(request: NextRequest) {
-  console.log("get product")
+  console.log("get product");
   const productId = request.nextUrl.searchParams.get("pid");
 
   let result = await client.data

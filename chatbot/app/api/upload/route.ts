@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
 
 
     await uploadToGCS(path)
+    console.log(path)
     return NextResponse.json({fileName: file.name})
 
 }

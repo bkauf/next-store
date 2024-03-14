@@ -3,6 +3,12 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 
+interface Product {
+  description: String;
+  name: String;
+  filename: String;
+  id: String;
+}
 
 const page = () => {
   const [productsAry, setproductsAry] = useState([]);
@@ -45,11 +51,11 @@ const page = () => {
 
         {productsAry.length >= 1 ? (
           <>
-            <ul className="w-1/2">
+            <div className="grid grid-flow-row-dense grid-cols-3 p-2 ml-2 mr-2">
               {
-                // @ts-ignore
-                productsAry.map((product, index) => (
-                  <li key={index} className="mt-2">
+               
+                productsAry.map((product: Product, index) => (
+                  <div key={index} className="mt-2">
                   
                     <Link href={
                       // @ts-ignore
@@ -57,14 +63,26 @@ const page = () => {
                       <span className="text-lg font-bold">{
                       // @ts-ignore
                       product.name}</span>
+                      <span>
+
+                      {product.filename ? (
+            <img
+              className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
+              src={`https://storage.mtls.cloud.google.com/${process.env.NEXT_PUBLIC_GCS_BUCKET}/${product.filename}`}
+              alt="filename"
+            />
+          ) : null}
+
+
+                      </span>
                       <p>{
                       // @ts-ignore
-                      product.description}</p>
+                      product.description.substring(0,90)}...</p>
                     </Link>
-                  </li>
+                  </div>
                 ))
               }
-            </ul>
+            </div>
           </>
         ) : (
         null

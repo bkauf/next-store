@@ -5,13 +5,13 @@ import axios from "axios";
 interface ProductObj {
   description: String;
   name: String;
-  url: String;
+  filename: String;
   id: String;
 }
 
 const Product = ({ productObj }: { productObj: ProductObj }) => {
   const [file, setFile] = useState<File | undefined>();
-  const [image, setImage] = useState("");
+  const [filename, setFilename] = useState("");
   const [product, setProduct] = useState({});
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -45,14 +45,14 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
     };
     axios.post(url, formData, config).then((response) => {
       console.log("uploaded", response.data.fileName);
-      setImage(response.data.fileName);
+      setFilename(response.data.fileName);
     });
   }
 
   function generateDesc() {
     const data = {
       name: name,
-      fileName: image,
+      fileName: filename,
     };
     const headers = {
       "Content-Type": "application/json",
@@ -70,8 +70,9 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
   function createProduct() {
     axios
       .post("/api/weaviate", {
-        productName: name,
-        productDesc: description,
+        name: name,
+        description: description,
+        filename: filename
       })
       .then(function (response) {
         console.log(response);
@@ -139,10 +140,10 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
               </button>
             </li>
           </ul>
-          {image ? (
+          {filename ? (
             <img
               className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
-              src={`https://storage.mtls.cloud.google.com/hipster-ai-images/${image}`}
+              src={`https://storage.mtls.cloud.google.com/${process.env.NEXT_PUBLIC_GCS_BUCKET}/${filename}`}
               alt="filename"
             />
           ) : null}
