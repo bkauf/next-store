@@ -1,28 +1,26 @@
 "use client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Product from "@/app/components/Product"
+import Product from "@/app/components/Product";
 
 const page = ({ searchParams }) => {
   const productId = searchParams.id;
   const [product, setProduct] = useState({});
 
   useEffect(() => {
-   
+    if (productId) {
       getProduct(productId);
-   
-   
+    }
   }, []);
 
   const getProduct = async (productId) => {
-  
     axios
       .get("/api/weaviate?pid=" + productId)
       .then((response) => {
         // Handle successful response
         console.log("Response data:", response.data);
         let product = response.data;
-        product['id'] = productId;
+        product["id"] = productId;
         setProduct(response.data);
       })
       .catch((error) => {
@@ -44,9 +42,8 @@ const page = ({ searchParams }) => {
 
   return (
     <>
-     <Product productObj={product}/>
+      <Product productObj={product} />
     </>
   );
 };
 export default page;
-
