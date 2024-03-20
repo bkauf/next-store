@@ -1,7 +1,7 @@
 steps:
 #get environment variables file
   - name: gcr.io/cloud-builders/gsutil
-    args: ['cp', 'gs://$_BUCKET/*', './chatbot']
+    args: ['cp', 'gs://$_BUCKET/*', './demo-website']
 
   - id: "Create Container"
     name: "gcr.io/cloud-builders/docker"
