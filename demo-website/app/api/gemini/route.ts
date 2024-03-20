@@ -15,8 +15,8 @@ export async function POST(request: Request) {
 
   const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
   const prompt = "Write a short product description for the item in this image";
-
-  let imgBase64 = await downloadFile(postData.fileName);
+  //download image to send to model 
+  await downloadFile(postData.fileName);
   const result = await model.generateContent([
     prompt,
     postData.name,
@@ -29,19 +29,7 @@ export async function POST(request: Request) {
   return NextResponse.json({ description: text });
 }
 
-const getImage = async (fileName: string) => {
-  console.log("downloading image from GCS...");
-  const path = "image.jpg";
-  const mimeType = "image/jpeg";
-  const file = fs.createWriteStream("image.jpg");
-  const request = https.get(
-    `https://storage.googleapis.com/${process.env.GCS_BUCKET}/${fileName}`,
-    function (response: any) {
-      response.pipe(file);
-      console.log("downloading image complete...");
-    }
-  );
-};
+
 
 async function downloadFile(fileName: string) {
   console.log("downloading image from GCS...");
