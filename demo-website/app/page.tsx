@@ -8,6 +8,10 @@ interface Product {
   name: String;
   filename: String;
   id: String;
+  image: String;
+  _additional: {
+    id: String;
+  };
 }
 
 const page = () => {
@@ -52,41 +56,48 @@ const page = () => {
         {productsAry.length >= 1 ? (
           <>
             <div className="grid grid-flow-row-dense grid-cols-3 p-2 ml-2 mr-2">
-              {
-               
-                productsAry.map((product: Product, index) => (
-                  <div key={index} className="mt-2">
-                  
-                    <Link href={
+              {productsAry.map((product: Product, index) => (
+                <div key={index} className="mt-2">
+                  <Link
+                    href={
                       // @ts-ignore
-                      "/product/?id=" + product._additional.id}>
-                      <span className="text-lg font-bold">{
-                      // @ts-ignore
-                      product.name}</span>
-                      <span>
-
+                      "/product/?id=" + product._additional.id
+                    }
+                  >
+                    <span className="text-lg font-bold">
+                      {
+                        // @ts-ignore
+                        product.name
+                      }
+                    </span>
+                    <span>
                       {product.filename ? (
-            <img
-              className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
-              src={`https://storage.googleapis.com/${process.env.NEXT_PUBLIC_GCS_BUCKET}/${product.filename}`}
-              alt="filename"
-            />
-          ) : null}
-
-
-                      </span>
-                      <p>{
-                      // @ts-ignore
-                      product.description.substring(0,90)}...</p>
-                    </Link>
-                  </div>
-                ))
-              }
+                        <img
+                          className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
+                          src={`https://storage.googleapis.com/${process.env.NEXT_PUBLIC_GCS_BUCKET}/${product.filename}`}
+                          alt="filename"
+                        />
+                      ) : null}
+                    </span>
+                    <p>
+                      {
+                        // @ts-ignore
+                        product.description
+                          ? product.description.length > 90
+                            ? product.description.substring(0, 90) + "..."
+                            : product.description
+                          : null
+                      }
+                      ...
+                    </p>
+                  </Link>
+                  <img src={`data:image/png;base64,${product.image}`}/>
+                  
+                </div>
+              ))}
             </div>
           </>
-        ) : (
-        null
-        )}
+        ) : null}
       </div>
     </>
   );

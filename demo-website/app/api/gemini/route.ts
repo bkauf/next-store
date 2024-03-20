@@ -29,7 +29,19 @@ export async function POST(request: Request) {
   return NextResponse.json({ description: text });
 }
 
-
+const getImage = async (fileName: string) => {
+  console.log("downloading image from GCS...");
+  const path = "image.jpg";
+  const mimeType = "image/jpeg";
+  const file = fs.createWriteStream("image.jpg");
+  const request = https.get(
+    `https://storage.googleapis.com/${process.env.GCS_BUCKET}/${fileName}`,
+    function (response: any) {
+      response.pipe(file);
+      console.log("downloading image complete...");
+    }
+  );
+};
 
 async function downloadFile(fileName: string) {
   console.log("downloading image from GCS...");

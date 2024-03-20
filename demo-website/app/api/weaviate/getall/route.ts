@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   let result = await client.graphql
   .get()
   .withClassName("Products")
-  .withFields("name description filename  _additional { id }")
+  .withFields("name description filename image  _additional { id }")
   .withLimit(50)
   .do();
 
