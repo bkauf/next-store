@@ -5,7 +5,7 @@ steps:
 
   - id: "Create Container"
     name: "gcr.io/cloud-builders/docker"
-    args: ["build", "--tag=$_REPO_URL/$_PROJECT_ID/$_IMAGE_REPO/$_IMAGE_NAME:$SHORT_SHA", "chatbot"]
+    args: ["build", "--tag=$_REPO_URL/$_PROJECT_ID/$_IMAGE_REPO/$_IMAGE_NAME:$SHORT_SHA", "demo-website"]
    
 
   - id: "Push to Container Registry"
