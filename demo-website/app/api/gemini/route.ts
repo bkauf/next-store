@@ -6,7 +6,7 @@ const axios = require("axios");
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 interface PostData {
-  name: string;
+  title: string;
   fileName: string;
 }
 
@@ -19,8 +19,8 @@ export async function POST(request: Request) {
   await downloadFile(postData.fileName);
   const result = await model.generateContent([
     prompt,
-    postData.name,
-    [fileToGenerativePart("image.jpg", "image/jpeg")],
+    postData.title,
+    [convertToB64("image.jpg", "image/jpeg")],
   ]);
   const response = await result.response;
   const text = response.text();
@@ -29,19 +29,7 @@ export async function POST(request: Request) {
   return NextResponse.json({ description: text });
 }
 
-const getImage = async (fileName: string) => {
-  console.log("downloading image from GCS...");
-  const path = "image.jpg";
-  const mimeType = "image/jpeg";
-  const file = fs.createWriteStream("image.jpg");
-  const request = https.get(
-    `https://storage.googleapis.com/${process.env.GCS_BUCKET}/${fileName}`,
-    function (response: any) {
-      response.pipe(file);
-      console.log("downloading image complete...");
-    }
-  );
-};
+
 
 async function downloadFile(fileName: string) {
   console.log("downloading image from GCS...");
@@ -65,7 +53,7 @@ async function downloadFile(fileName: string) {
   }
 }
 
-function fileToGenerativePart(path: string, mimeType: string) {
+function convertToB64(path: string, mimeType: string) {
   console.log("Convert to base64...");
   return {
     inlineData: {

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Link from "next/link";
 
 interface ProductObj {
   description: String;
@@ -13,13 +14,16 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
   const [file, setFile] = useState<File | undefined>();
   const [filename, setFilename] = useState("");
   const [product, setProduct] = useState({});
-  const [name, setName] = useState("");
+
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   useEffect(() => {
     //@ts-ignore
-    setName(productObj.name);
+    setTitle(productObj.title);
     //@ts-ignore
     setDescription(productObj.description);
+    console.log(productObj);
   }, [productObj]);
 
   function handleChange(e: React.FormEvent<HTMLInputElement>) {
@@ -51,7 +55,7 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
 
   function generateDesc() {
     const data = {
-      name: name,
+      title: title,
       fileName: filename,
     };
     const headers = {
@@ -68,12 +72,35 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
       });
   }
   function createProduct() {
+    let productData = {
+      title: title,
+      category: category,
+      description: description,
+      filename: filename,
+    };
+
     axios
-      .post("/api/weaviate", {
-        name: name,
-        description: description,
-        filename: filename
+      .post("/api/weaviate", productData)
+      .then(function (response) {
+        console.log(response);
+        window.location.href = "/";
       })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  function saveProduct() {
+    let productData = {
+      title: title,
+      category: category,
+      description: description,
+      filename: filename,
+      productId: productObj.id,
+    };
+
+    axios
+      .patch("/api/weaviate", productData)
       .then(function (response) {
         console.log(response);
         window.location.href = "/";
@@ -115,13 +142,23 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
         <form onSubmit={uploadImage}>
           <ul>
             <li>
-              Name:{" "}
+              Title:{" "}
               <input
-                className="bg-gray-100 p-1"
+                className="bg-gray-100 m-2 p-1"
                 //@ts-ignore
-                onChange={(event) => setName(event.target.value)}
+                onChange={(event) => setTitle(event.target.value)}
                 //@ts-ignore
-                value={name}
+                value={title}
+              />
+            </li>
+            <li>
+              Category:{" "}
+              <input
+                className="bg-gray-100 m-2 p-1"
+                //@ts-ignore
+                onChange={(event) => setCategory(event.target.value)}
+                //@ts-ignore
+                value={category}
               />
             </li>
             <li>
@@ -175,22 +212,31 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
             // @ts-ignore comment
             rows="6"
           ></textarea>
-          <button
-            type="submit"
-            onClick={createProduct}
-            className="bg-blue-500 text-white mb-2 mt-3 hover:bg-grey-300 ld py-2 px-4 rounded"
-          >
-            Create Product
-          </button>
+          {productObj ? (
+            <button
+              type="submit"
+              onClick={saveProduct}
+              className="bg-blue-500 text-white mb-2 mt-3 hover:bg-grey-300 ld py-2 px-4 rounded"
+            >
+              Save Product
+            </button>
+          ) : (
+            <button
+              type="submit"
+              onClick={createProduct}
+              className="bg-blue-500 text-white mb-2 mt-3 hover:bg-grey-300 ld py-2 px-4 rounded"
+            >
+              Create Product
+            </button>
+          )}
         </div>
       </div>
-      <button
-        type="submit"
+      <Link href="/" 
         onClick={deleteProduct}
-        className="bg-red-500 text-white mb-2 mt-3 hover:bg-grey-300 py-2 px-4 rounded"
-      >
+        className=" text-red mb-2 mt-3  py-2 px-4">
+     
         Delete Product
-      </button>
+      </Link>
     </div>
   );
 };

@@ -6,12 +6,14 @@ import client from "@/app/lib/weaviate-client";
 export async function POST(request: NextRequest) {
   const postData = await request.json(); // get request body
 
-  const name = postData.name;
+  const title = postData.title;
   const description = postData.description;
   const filename = postData.filename;
+  const category = postData.category;
 
   let itemDetails = {
-    name: name,
+    title: title,
+    category: category,
     description: description,
     filename: filename,
   };
@@ -19,6 +21,36 @@ export async function POST(request: NextRequest) {
   let result = await client.data
     .creator()
     .withClassName("Products")
+    .withProperties(itemDetails)
+    .do()
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  }
+    /* Function to update a product */
+export async function PATCH(request: NextRequest) {
+  const postData = await request.json(); // get request body
+
+  const title = postData.title;
+  const description = postData.description;
+  const filename = postData.filename;
+  const category = postData.category;
+  const productId = postData.productId;
+
+  let itemDetails = {
+    title: title,
+    category: category,
+    description: description,
+    filename: filename,
+  };
+
+  let result = await client.data
+    .merger()
+    .withClassName("Products")
+    .withId(productId)
     .withProperties(itemDetails)
     .do()
     .then((res) => {
@@ -44,7 +76,7 @@ export async function GET(request: NextRequest) {
     .withId(productId)
     .do()
     .catch((error) => {
-      console.error("error1", error);
+      console.error("error", error);
     });
   if (result) {
     return NextResponse.json(result.properties);
