@@ -71,7 +71,7 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
         console.error(error);
       });
   }
-  function createProduct() {
+  function createProduct () {
     let productData = {
       title: title,
       category: category,
@@ -79,15 +79,21 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
       filename: filename,
     };
 
-    axios
+  axios
       .post("/api/weaviate", productData)
       .then(function (response) {
         console.log(response);
-        window.location.href = "/";
+        if (response.status === 200) {
+       window.location.href = "/";
+        }
+       
       })
       .catch(function (error) {
         console.log(error);
       });
+
+     
+     
   }
 
   function saveProduct() {
@@ -103,7 +109,9 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
       .patch("/api/weaviate", productData)
       .then(function (response) {
         console.log(response);
-        window.location.href = "/";
+        if (response.status === 200) {
+          window.location.href = "/";
+           }
       })
       .catch(function (error) {
         console.log(error);
@@ -117,7 +125,9 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
         // Handle successful response
         console.log("Response data:", response.data);
 
-        window.location.href = "/";
+        if (response.status === 200) {
+          window.location.href = "/";
+           }
       })
       .catch((error) => {
         // Handle error
@@ -212,7 +222,7 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
             // @ts-ignore comment
             rows="6"
           ></textarea>
-          {productObj ? (
+          {productObj.id ? (<>
             <button
               type="submit"
               onClick={saveProduct}
@@ -220,6 +230,13 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
             >
               Save Product
             </button>
+            <Link href="/" 
+            onClick={deleteProduct}
+            className=" text-red mb-2 mt-3  py-2 px-4">
+         
+            Delete Product
+          </Link>
+          </>
           ) : (
             <button
               type="submit"
@@ -231,12 +248,7 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
           )}
         </div>
       </div>
-      <Link href="/" 
-        onClick={deleteProduct}
-        className=" text-red mb-2 mt-3  py-2 px-4">
-     
-        Delete Product
-      </Link>
+      
     </div>
   );
 };

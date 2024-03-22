@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
     .catch((err) => {
       console.error(err);
     });
+    return NextResponse.json({ status: "ok" });
   }
     /* Function to update a product */
 export async function PATCH(request: NextRequest) {
