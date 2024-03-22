@@ -7,7 +7,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 interface PostData {
   title: string;
-  fileName: string;
+  link: string;
 }
 
 export async function POST(request: Request) {
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
   const prompt = "Write a short product description for the item in this image";
   //download image to send to model 
-  await downloadFile(postData.fileName);
+  await downloadFile(postData.link);
   const result = await model.generateContent([
     prompt,
     postData.title,
@@ -31,11 +31,11 @@ export async function POST(request: Request) {
 
 
 
-async function downloadFile(fileName: string) {
+async function downloadFile(fileLink: string) {
   console.log("downloading image from GCS...");
   try {
     const response = await axios({
-      url: `https://storage.googleapis.com/${process.env.GCS_BUCKET}/${fileName}`,
+      url: fileLink,
       method: "GET",
       responseType: "stream", // Important: stream the response
     });
