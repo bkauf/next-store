@@ -8,14 +8,14 @@ export async function POST(request: NextRequest) {
 
   const title = postData.title;
   const description = postData.description;
-  const filename = postData.filename;
+  const link = postData.link;
   const category = postData.category;
 
   let itemDetails = {
     title: title,
     category: category,
     description: description,
-    filename: filename,
+    link: link,
   };
 
   let result = await client.data
@@ -37,7 +37,7 @@ export async function PATCH(request: NextRequest) {
 
   const title = postData.title;
   const description = postData.description;
-  const filename = postData.filename;
+  const link= postData.link;
   const category = postData.category;
   const productId = postData.productId;
 
@@ -45,7 +45,7 @@ export async function PATCH(request: NextRequest) {
     title: title,
     category: category,
     description: description,
-    filename: filename,
+    link: link,
   };
 
   let result = await client.data

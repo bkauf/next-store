@@ -6,13 +6,13 @@ import Link from "next/link";
 interface ProductObj {
   description: String;
   name: String;
-  filename: String;
+  link: String;
   id: String;
 }
 
 const Product = ({ productObj }: { productObj: ProductObj }) => {
   const [file, setFile] = useState<File | undefined>();
-  const [filename, setFilename] = useState("");
+  const [link, setLink] = useState("");
   const [product, setProduct] = useState({});
 
   const [title, setTitle] = useState("");
@@ -23,6 +23,11 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
     setTitle(productObj.title);
     //@ts-ignore
     setDescription(productObj.description);
+    //@ts-ignore
+    setLink(productObj.link);
+     //@ts-ignore
+     setCategory(productObj.category);
+
     console.log(productObj);
   }, [productObj]);
 
@@ -41,22 +46,22 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
     // @ts-ignore comment
     formData.append("file", file);
     // @ts-ignore comment
-    formData.append("fileName", file.name);
+    formData.append("link", file.name);
     const config = {
       headers: {
         "content-type": "multipart/form-data",
       },
     };
     axios.post(url, formData, config).then((response) => {
-      console.log("uploaded", response.data.fileName);
-      setFilename(response.data.fileName);
+      console.log("uploaded", response.data.link);
+      setLink(response.data.link);
     });
   }
 
   function generateDesc() {
     const data = {
       title: title,
-      fileName: filename,
+      link: link,
     };
     const headers = {
       "Content-Type": "application/json",
@@ -76,7 +81,7 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
       title: title,
       category: category,
       description: description,
-      filename: filename,
+      link: link,
     };
 
     axios
@@ -97,7 +102,7 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
       title: title,
       category: category,
       description: description,
-      filename: filename,
+      link: link,
       productId: productObj.id,
     };
 
@@ -183,11 +188,11 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
               </button>
             </li>
           </ul>
-          {filename ? (
+          {link ? (
             <img
               className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
-              src={`https://storage.googleapis.com/${process.env.NEXT_PUBLIC_GCS_BUCKET}/${filename}`}
-              alt="filename"
+              src={`${link}`}
+              alt="link"
             />
           ) : null}
         </form>

@@ -17,9 +17,9 @@ export async function POST(request: NextRequest) {
     await writeFile(path, buffer)
 
 
-    await uploadToGCS(path)
+   await uploadToGCS(path)
     console.log(path)
-    return NextResponse.json({fileName: file.name})
+    return NextResponse.json({link: "https://storage.googleapis.com/"+process.env.GCS_BUCKET+"/"+file.name})
 
 }
 

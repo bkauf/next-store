@@ -73,16 +73,13 @@ const page = () => {
                       }
                     </span>
                     <span>
-                   
-                        <img
-                          className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
-                          src={`${product.link}`}
-                          alt="filename"
-                        />
-                     
+                      <img
+                        className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
+                        src={`${product.link}`}
+                        alt="filename"
+                      />
                     </span>
 
-                   
                     <p>
                       {
                         // @ts-ignore
@@ -92,7 +89,6 @@ const page = () => {
                             : product.description
                           : null
                       }
-                      ...
                     </p>
                   </Link>
                 </div>
