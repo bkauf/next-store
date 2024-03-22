@@ -27,8 +27,8 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
     setDescription(productObj.description);
     //@ts-ignore
     setLink(productObj.link);
-     //@ts-ignore
-     setCategory(productObj.category);
+    //@ts-ignore
+    setCategory(productObj.category);
 
     console.log(productObj);
   }, [productObj]);
@@ -42,7 +42,7 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
 
   function uploadImage(e: React.SyntheticEvent) {
     e.preventDefault();
-    setLoadingImg(true)
+    setLoadingImg(true);
 
     const url = "api/upload";
     const formData = new FormData();
@@ -55,18 +55,22 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
         "content-type": "multipart/form-data",
       },
     };
-    axios.post(url, formData, config).then((response) => {
-      console.log("uploaded", response.data.link);
-      setLink(response.data.link);
-    }).catch((error) => {
-      console.error(error);
-    }).finally(() => {
-      setLoadingImg(false)
-    });
+    axios
+      .post(url, formData, config)
+      .then((response) => {
+        console.log("uploaded", response.data.link);
+        setLink(response.data.link);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoadingImg(false);
+      });
   }
 
   function generateDesc() {
-    setLoadingDesc(true)
+    setLoadingDesc(true);
     const data = {
       title: title,
       link: link,
@@ -84,7 +88,7 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
         console.error(error);
       })
       .finally(() => {
-        setLoadingDesc(false)
+        setLoadingDesc(false);
       });
   }
   function createProduct() {
@@ -166,7 +170,7 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
             <li>
               Title:{" "}
               <input
-                className="bg-gray-100 m-2 p-1"
+                className="bg-gray-100 w-96 m-2 p-1"
                 //@ts-ignore
                 onChange={(event) => setTitle(event.target.value)}
                 //@ts-ignore
@@ -176,7 +180,7 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
             <li>
               Category:{" "}
               <input
-                className="bg-gray-100 m-2 p-1"
+                className="bg-gray-100 w-96 m-2 p-1"
                 //@ts-ignore
                 onChange={(event) => setCategory(event.target.value)}
                 //@ts-ignore
@@ -191,27 +195,23 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
                 name="file"
                 onChange={handleChange}
               />
-
-{loadingImg ? (<div
-className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
-role="status">
-<span
-  className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
-  >Loading...</span>
-
-</div>): (
-      <button
-      type="submit"
-      className="bg-green-500 text-white hover:bg-grey-300 ld py-2 px-4 rounded"
-    >
-      Upload
-    </button>
-
-
-)}
-
-
-        
+              {loadingImg ? (
+                <div
+                  className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+                  role="status"
+                >
+                  <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                    Loading...
+                  </span>
+                </div>
+              ) : (
+                <button
+                  type="submit"
+                  className="bg-green-500 text-white hover:bg-grey-300 ld py-2 px-4 rounded"
+                >
+                  Upload
+                </button>
+              )}
             </li>
           </ul>
           {link ? (
@@ -223,29 +223,25 @@ role="status">
           ) : null}
         </form>
         <div className="w-96 mt-2">
-{loadingDesc ?(
+          {loadingDesc ? (
+            <div
+              className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+              role="status"
+            >
+              <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                Loading...
+              </span>
+            </div>
+          ) : (
+            <button
+              type="submit"
+              onClick={generateDesc}
+              className="bg-indigo-500 text-white mb-2 mt-3 hover:bg-grey-300 ld py-2 px-4 rounded"
+            >
+              Generate Product Description
+            </button>
+          )}
 
-<div
-className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
-role="status">
-<span
-  className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
-  >Loading...</span>
-
-</div>
-): (
-  <button
-  type="submit"
-  onClick={generateDesc}
-  className="bg-indigo-500 text-white mb-2 mt-3 hover:bg-grey-300 ld py-2 px-4 rounded"
->
-  Generate Product Description
-</button>
-
-)}
-       
-      
-     
           <textarea
             // @ts-ignore comment
 
