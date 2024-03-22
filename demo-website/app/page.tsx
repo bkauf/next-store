@@ -50,11 +50,11 @@ const page = () => {
   };
   return (
     <>
-      <div>
+      <div className="w-full ">
         {productsAry.length >= 1 ? (
           <>
             <h1>Product List ({productsAry.length})</h1>
-            <div className="grid grid-flow-row-dense grid-cols-3 p-3 ml-2 mr-2">
+            <div className="grid grid-cols-1 w-full md:grid-cols-4 p-3 ml-2 mr-2">
               {productsAry.map((product: Product, index) => (
                 <div
                   key={index}
@@ -74,7 +74,7 @@ const page = () => {
                     </span>
                     <span>
                       <img
-                        className="mx-auto   h-96 md:h-auto md:w-48 "
+                        className="mx-auto   h-96 md:h-auto sm-h-50  "
                         src={`${product.link}`}
                         alt="filename"
                       />
