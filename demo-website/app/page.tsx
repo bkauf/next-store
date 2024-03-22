@@ -51,14 +51,15 @@ const page = () => {
   return (
     <>
       <div>
-       
-
         {productsAry.length >= 1 ? (
           <>
-           <h1>Product List ({productsAry.length})</h1>
+            <h1>Product List ({productsAry.length})</h1>
             <div className="grid grid-flow-row-dense grid-cols-3 p-2 ml-2 mr-2">
               {productsAry.map((product: Product, index) => (
-                <div key={index} className="m-2">
+                <div
+                  key={index}
+                  className="m-2 p-1 hover:border-gray-500 hover:border"
+                >
                   <Link
                     href={
                       // @ts-ignore
@@ -80,6 +81,8 @@ const page = () => {
                         />
                       ) : null}
                     </span>
+
+                    <img src={`data:image/png;base64,${product.image}`} />
                     <p>
                       {
                         // @ts-ignore
@@ -91,8 +94,6 @@ const page = () => {
                       }
                       ...
                     </p>
-                
-                  <img src={`data:image/png;base64,${product.image}`}/>
                   </Link>
                 </div>
               ))}
