@@ -16,6 +16,8 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
   const [product, setProduct] = useState({});
 
   const [title, setTitle] = useState("");
+  const [loadingDesc, setLoadingDesc] = useState(false);
+  const [loadingImg, setLoadingImg] = useState(false);
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   useEffect(() => {
@@ -40,6 +42,7 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
 
   function uploadImage(e: React.SyntheticEvent) {
     e.preventDefault();
+    setLoadingImg(true)
 
     const url = "api/upload";
     const formData = new FormData();
@@ -55,10 +58,15 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
     axios.post(url, formData, config).then((response) => {
       console.log("uploaded", response.data.link);
       setLink(response.data.link);
+    }).catch((error) => {
+      console.error(error);
+    }).finally(() => {
+      setLoadingImg(false)
     });
   }
 
   function generateDesc() {
+    setLoadingDesc(true)
     const data = {
       title: title,
       link: link,
@@ -74,6 +82,9 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
       })
       .catch((error) => {
         console.error(error);
+      })
+      .finally(() => {
+        setLoadingDesc(false)
       });
   }
   function createProduct() {
@@ -180,12 +191,27 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
                 name="file"
                 onChange={handleChange}
               />
-              <button
-                type="submit"
-                className="bg-green-500 text-white hover:bg-grey-300 ld py-2 px-4 rounded"
-              >
-                Upload
-              </button>
+
+{loadingImg ? (<div
+className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+role="status">
+<span
+  className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+  >Loading...</span>
+
+</div>): (
+      <button
+      type="submit"
+      className="bg-green-500 text-white hover:bg-grey-300 ld py-2 px-4 rounded"
+    >
+      Upload
+    </button>
+
+
+)}
+
+
+        
             </li>
           </ul>
           {link ? (
@@ -196,16 +222,30 @@ const Product = ({ productObj }: { productObj: ProductObj }) => {
             />
           ) : null}
         </form>
-
         <div className="w-96 mt-2">
-          <button
-            type="submit"
-            onClick={generateDesc}
-            className="bg-indigo-500 text-white mb-2 mt-3 hover:bg-grey-300 ld py-2 px-4 rounded"
-          >
-            Generate Product Description
-          </button>
+{loadingDesc ?(
 
+<div
+className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+role="status">
+<span
+  className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+  >Loading...</span>
+
+</div>
+): (
+  <button
+  type="submit"
+  onClick={generateDesc}
+  className="bg-indigo-500 text-white mb-2 mt-3 hover:bg-grey-300 ld py-2 px-4 rounded"
+>
+  Generate Product Description
+</button>
+
+)}
+       
+      
+     
           <textarea
             // @ts-ignore comment
 
