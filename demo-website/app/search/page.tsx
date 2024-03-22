@@ -11,7 +11,7 @@ const page = () => {
     // }
   }, []);
 
-  const productSearch = async (productId) => {
+  const productSearch = async () => {
     axios
       .get("/api/weaviate/search")
       .then((response) => {
