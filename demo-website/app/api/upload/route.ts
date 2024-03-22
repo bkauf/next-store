@@ -31,5 +31,4 @@ const storage = new Storage();
 
     await storage.bucket(process.env.GCS_BUCKET).upload(filePath).catch(console.error);
  
-
 }
