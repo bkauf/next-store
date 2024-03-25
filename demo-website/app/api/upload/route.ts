@@ -26,13 +26,13 @@ export async function POST(request: NextRequest) {
   try {
     await runSequentially(path, buffer);
     console.log("File uploaded complete")
-    // return NextResponse.json({
-    //     link:
-    //       "https://storage.googleapis.com/" +
-    //       process.env.GCS_BUCKET +
-    //       "/" +
-    //       file.name,
-    //   })
+    return NextResponse.json({
+        link:
+          "https://storage.googleapis.com/" +
+          process.env.GCS_BUCKET +
+          "/" +
+          file.name,
+      })
   } catch (error) {
     console.log(error);
     return NextResponse.json({ success: false });
