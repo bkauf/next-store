@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
   try {
     await runSequentially(path, buffer);
-    console.log("File uploaded")
+    console.log("File uploaded complete")
   } catch (error) {
     console.log(error);
     return NextResponse.json({ success: false });
@@ -49,5 +49,9 @@ const uploadToGCS = async (filePath: any, result1: any) => {
   await storage
     .bucket(process.env.GCS_BUCKET)
     .upload(filePath)
-    .catch(console.error);
+    .catch(console.error)
+    .then(() => {
+      console.log("File uploaded to GCS");
+      return ;
+    });
 };
