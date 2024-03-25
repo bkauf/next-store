@@ -24,19 +24,17 @@ export async function POST(request: NextRequest) {
   try {
     await runSequentially(path, buffer);
     console.log("File uploaded complete")
-  } catch (error) {
-    console.log(error);
-    return NextResponse.json({ success: false });
-  } finally{
     return NextResponse.json({
         link:
           "https://storage.googleapis.com/" +
           process.env.GCS_BUCKET +
           "/" +
           file.name,
-      });
-
-  }
+      })
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({ success: false });
+  } 
 
   
 }
@@ -46,7 +44,7 @@ const uploadToGCS = async (filePath: any, result1: any) => {
   const storage = new Storage();
   console.log("Uploading file to GCS...")
 
-  await storage
+  let result = await storage
     .bucket(process.env.GCS_BUCKET)
     .upload(filePath)
     .catch(console.error)
@@ -54,4 +52,5 @@ const uploadToGCS = async (filePath: any, result1: any) => {
       console.log("File uploaded to GCS");
       return result1;
     });
+    return result
 };
