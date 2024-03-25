@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
   .withLimit(200)
   .do();
 
-  console.log(result.data.Get.Products);
+  console.log("Get all products from weaviate");
 
 
   if (result) {
