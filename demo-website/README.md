@@ -1,5 +1,14 @@
 # Demo website for Generative Feedback Loops
 
+
+Build the IAM account for cloud run
+
+```sh
+gcloud iam service-accounts add-iam-policy-binding "SERVICE_ACCOUNT_EMAIL" \
+    --member "PRINCIPAL" \
+    --role "roles/iam.serviceAccountUser"
+```
+
 Sample product to upload
 
 ```
