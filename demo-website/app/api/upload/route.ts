@@ -15,13 +15,14 @@ export async function POST(request: NextRequest) {
   const path = join("/", "tmp", file.name);
 
   async function runSequentially(path: any, buffer: any) {
-    await writeFile(path, buffer);
-    await uploadToGCS(path);
+    const result1 = await writeFile(path, buffer);
+    const result2 = await uploadToGCS(path, result1);
   }
 
   try {
     runSequentially(path, buffer);
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ success: false });
   }
 
@@ -34,9 +35,10 @@ export async function POST(request: NextRequest) {
   });
 }
 
-const uploadToGCS = async (filePath: any) => {
+const uploadToGCS = async (filePath: any, result1: any) => {
   const { Storage } = require("@google-cloud/storage");
   const storage = new Storage();
+  console.log("Uploading file to GCS...")
 
   await storage
     .bucket(process.env.GCS_BUCKET)
