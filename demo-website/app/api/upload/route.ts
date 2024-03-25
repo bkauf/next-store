@@ -52,6 +52,6 @@ const uploadToGCS = async (filePath: any, result1: any) => {
     .catch(console.error)
     .then(() => {
       console.log("File uploaded to GCS");
-      return ;
+      return result1;
     });
 };
