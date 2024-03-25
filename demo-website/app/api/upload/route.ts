@@ -18,19 +18,21 @@ export async function POST(request: NextRequest) {
     const result1 = await writeFile(path, buffer);
     console.log("File written to", path);
     const result2 = await uploadToGCS(path, result1);
+    console.log("Processing complete");
+
 
   }
 
   try {
     await runSequentially(path, buffer);
     console.log("File uploaded complete")
-    return NextResponse.json({
-        link:
-          "https://storage.googleapis.com/" +
-          process.env.GCS_BUCKET +
-          "/" +
-          file.name,
-      })
+    // return NextResponse.json({
+    //     link:
+    //       "https://storage.googleapis.com/" +
+    //       process.env.GCS_BUCKET +
+    //       "/" +
+    //       file.name,
+    //   })
   } catch (error) {
     console.log(error);
     return NextResponse.json({ success: false });
