@@ -41,7 +41,7 @@ const uploadToGCS = async (file: any, buffer: any) => {
     .bucket(process.env.GCS_BUCKET)
     .file(file.name)
     .save(Buffer.from(buffer))
-    .catch(console.error)
+    .catch(console.error, console.log("file upload failed"))
     .then(() => {
       console.log("File uploaded to GCS");
     
