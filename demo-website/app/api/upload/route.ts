@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   const file: File | null = data.get("file") as unknown as File;
 
   if (!file) {
-    return NextResponse.json({ success: false });
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
   }
 
   const bytes = await file.arrayBuffer();
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       })
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ success: false });
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
   } 
 
   
