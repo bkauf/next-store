@@ -15,7 +15,25 @@ export async function POST(request: NextRequest) {
 
 
   try {
-    await uploadToGCS(file, buffer);
+    //await uploadToGCS(file, buffer);
+    const { Storage } = require("@google-cloud/storage");
+    const storage = new Storage();
+    console.log("Uploading file to GCS...")
+  
+    await storage
+      .bucket(process.env.GCS_BUCKET)
+      .file(file.name)
+      .save(Buffer.from(buffer))
+      .catch(console.error, console.log("file upload failed"))
+      .then(() => {
+        console.log("File uploaded to GCS");
+      
+      });
+
+
+
+
+
     console.log("File uploaded complete")
     return NextResponse.json({
         link:
