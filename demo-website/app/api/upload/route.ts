@@ -31,17 +31,21 @@ export async function POST(request: NextRequest) {
       });
 
 
+   
+
+
+    setTimeout(myFunction, 2000); // Delay of 2 seconds (2000 milliseconds)
 
 
 
     console.log("File uploaded complete")
-    return NextResponse.json({
-        link:
-          "https://storage.googleapis.com/" +
-          process.env.GCS_BUCKET +
-          "/" +
-          file.name,
-      })
+    // return NextResponse.json({
+    //     link:
+    //       "https://storage.googleapis.com/" +
+    //       process.env.GCS_BUCKET +
+    //       "/" +
+    //       file.name,
+    //   })
   } catch (error) {
     console.log(error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
@@ -64,4 +68,22 @@ const uploadToGCS = async (file: any, buffer: any) => {
       console.log("File uploaded to GCS");
     
     });
+
+    return NextResponse.json({
+        link:
+          "https://storage.googleapis.com/" +
+          process.env.GCS_BUCKET +
+          "/"})
 };
+
+
+
+function myFunction() {
+    console.log("This will be logged after 2 seconds");
+    return NextResponse.json({
+        link:
+          "https://storage.googleapis.com/" +
+          process.env.GCS_BUCKET +
+          "/" 
+      })
+}
