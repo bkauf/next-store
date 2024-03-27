@@ -27,6 +27,7 @@ const page = () => {
   return (
     <>
       <Product productObj={blankProduct}  />
+     
     </>
   );
 };

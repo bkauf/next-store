@@ -3,8 +3,6 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const page = () => {
-
-
   useEffect(() => {
     // if (productId) {
     //   getProduct(productId);
@@ -17,7 +15,6 @@ const page = () => {
       .then((response) => {
         // Handle successful response
         console.log("Response data:", response.data);
-       
       })
       .catch((error) => {
         // Handle error
@@ -38,7 +35,30 @@ const page = () => {
 
   return (
     <>
-    <h1>Search</h1>
+      <h1>Search</h1>
+
+      <form>
+        <div className="relative inline-block text-left">
+         
+          <ul>
+            <li>
+             <label>Search Term: 
+              </label> <input className="bg-gray-100 w-96 m-2 p-1" />
+            </li><li>
+            <label>Choose a Category:</label>
+          <select id="cars" name="cars" className="w-24">
+            <option value="volvo">Volvo</option>
+            <option value="saab">Saab</option>
+            <option value="fiat">Fiat</option>
+            <option value="audi">Audi</option>
+          </select>
+
+
+            </li>
+          </ul>
+        
+        </div>
+      </form>
     </>
   );
 };

@@ -9,6 +9,23 @@ gcloud iam service-accounts add-iam-policy-binding "SERVICE_ACCOUNT_EMAIL" \
     --role "roles/iam.serviceAccountUser"
 ```
 
+
+
+Build  the container using cloud build
+
+```sh
+gcloud builds submit --tag us-central1-docker.pkg.dev/[Project ID]/Repo]/[Name]
+```
+
+
+
+Submit the container to cloud run
+```sh
+gcloud run deploy [Name] \
+    --image us-central1-docker.pkg.dev/[Project ID]/Repo]/
+    ```
+
+
 Sample product to upload
 
 ```
