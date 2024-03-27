@@ -50,7 +50,7 @@ const page = () => {
     <>
       <h1 className="font-bold text-3xl mb-2 mt-3">Search</h1>
 
-      <div className="relative inline-block text-left">
+      <div className="relative inline-block text-black text-left">
         <ul>
           <li>
             <label>Search Term:</label>{" "}
