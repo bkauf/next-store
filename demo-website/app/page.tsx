@@ -5,7 +5,7 @@ import axios from "axios";
 
 interface Product {
   description: String;
-  name: String;
+  title: String;
   filename: String;
   id: String;
   link: String;
@@ -53,7 +53,7 @@ const page = () => {
       <div className="w-full ">
         {productsAry.length >= 1 ? (
           <>
-            <h1>Product List ({productsAry.length})</h1>
+            <h1 className="text-black">Product List ({productsAry.length})</h1>
             <div className="grid grid-cols-1 w-full md:grid-cols-4 p-3 ml-2 mr-2">
               {productsAry.map((product: Product, index) => (
                 <div
@@ -62,13 +62,12 @@ const page = () => {
                 >
                   <Link
                     href={
-                      // @ts-ignore
+                   
                       "/product/?id=" + product._additional.id
                     }
                   >
-                    <span className="text-lg font-bold">
+                    <span className="text-lg font-bold text-black">
                       {
-                        // @ts-ignore
                         product.title
                       }
                     </span>
@@ -80,9 +79,9 @@ const page = () => {
                       />
                     </span>
 
-                    <p>
+                    <p className="text-black">
                       {
-                        // @ts-ignore
+                     
                         product.description
                           ? product.description.length > 90
                             ? product.description.substring(0, 90) + "..."
