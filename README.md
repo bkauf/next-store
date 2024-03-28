@@ -27,15 +27,6 @@ Set your project id
 PROJECT_ID=<your project id>
 gcloud config set core/project $PROJECT_ID
 ```
-Set some environment variables
-
-```sh
-CLUSTER_NAME=demo-cluster # A name for your cluster
-SA_NAME=$CLUSTER_NAME-sa # A name for your service account
-REGION=us-central1 # Google cloud region to host your infrastucture
-AR_NAME=demo-registry # name for your artifact registry repo
-
-```
 Enable the necessary Google cloud APIs for your project.
 
 ```sh
@@ -54,14 +45,19 @@ clouddeploy.googleapis.com
 ```
 
 ### Deploy the GKE Cluster
-Create a service account for the GKE cluster
+Set some environment variables used in later steps.
+
+```sh
+CLUSTER_NAME=demo-cluster # A name for your cluster
+SA_NAME=$CLUSTER_NAME-sa # A name for your service account
+REGION=us-central1 # Google cloud region to host your infrastucture
+AR_NAME=demo-registry # name for your artifact registry repo
+```
+Create a service account for the GKE cluster. and add the necessary roles.
 
 ```sh
 gcloud iam service-accounts create $SA_NAME --display-name="Demo cluster service account"
-```
-Add the necessary roles to the GKE service account
 
-```sh
 gcloud projects add-iam-policy-binding $PROJECT_ID  \
 --member=serviceAccount:$SA_NAME@$PROJECT_ID.iam.gserviceaccount.com \
 --role=roles/monitoring.metricWriter
@@ -116,7 +112,7 @@ helm upgrade --install weaviate weaviate/weaviate \
 -f weaviate/demo-values.yaml \
 --set modules.generative-palm.apiKey=$GEMINI_API_KEY \
 --set modules.text2vec-palm.apiKey=$GEMINI_API_KEY \
---namespace weaviate --create-namespace
+--namespace weaviate
 ```
 
 ### Get Weaviate Server IPs
@@ -130,7 +126,7 @@ done
 
 echo "External HTTP IP obtained: $HTTP_IP"
 ```
-Optionally, we can get the IP of the GRPC service IP as well
+Optionally, we can get the IP of the GRPC service as well
 ```sh
 GRPC_IP=""
 while [[ -z "$GRPC_IP" ]]; do
