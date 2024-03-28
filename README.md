@@ -33,8 +33,7 @@ WEAVIATE_SERVER="from weaviate install steps"
 WEAVIATE_API_KEY="next-demo349834"
 #If you plan to run this locally you will need the following sevice account varable
 #GOOGLE_APPLICATION_CREDENTIALS="sa.json"
-
-``
+```
 
 1. Create a container repo 
 
