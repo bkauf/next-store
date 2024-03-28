@@ -94,7 +94,17 @@ gcloud container clusters get-credentials $CLUSTER_NAME --region $REGION --proje
 We are going to use the regional persistant disk storage class for weaviate, so we'll install that storage class in the cluster.
 
 ```sh
-kubectl install -f weaviate/storage-class.yaml
+kubectl apply -f weaviate/storage-class.yaml
+```
+
+Let's create a secret API KEY for weaviate so we don't allow unauthenticated access
+
+```sh
+export WEAVIATE_API_KEY=<some secret key string>
+kubectl create namespace weaviate
+kubectl create secret generic user-keys \
+--from-literal=AUTHENTICATION_APIKEY_ALLOWED_KEYS=$WEAVIATE_API_KEY \
+-n weaviate
 ```
 Let's install Weaviate
 
@@ -107,7 +117,27 @@ helm upgrade --install weaviate weaviate/weaviate \
 --set modules.text2vec-palm.apiKey=$PALM_API_KEY \
 --namespace weaviate --create-namespace
 ```
-1. Get Weaviate Server IP
+1. Get Weaviate Server IPs
+
+```sh
+HTTP_IP=""
+while [[ -z "$HTTP_IP" ]]; do
+  HTTP_IP=$(kubectl get service weaviate -n weaviate -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  sleep 2  # Adjust delay as needed
+done
+
+echo "External HTTP IP obtained: $HTTP_IP"
+```
+Optionally, We can get the IP of the GRPC service IP as well
+```sh
+GRPC_IP=""
+while [[ -z "$GRPC_IP" ]]; do
+  GRPC_IP=$(kubectl get service weaviate-grpc -n weaviate -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  sleep 2  # Adjust delay as needed
+done
+
+echo "External GRPC IP obtained: $GRPC_IP"
+```
 
 ## Setup the Demo application
 The following steps will walk through adding the nessessary  variables to the demo application, creating a container for it, then running it on Google Cloud Run
