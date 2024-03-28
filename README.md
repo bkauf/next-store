@@ -50,7 +50,6 @@ Set some environment variables used in later steps.
 CLUSTER_NAME=demo-cluster # A name for your cluster
 SA_NAME=$CLUSTER_NAME-sa # A name for your service account
 REGION=us-central1 # Google cloud region to host your infrastucture
-AR_NAME=demo-registry # name for your artifact registry repo
 ```
 Create a service account for the GKE cluster. and add the necessary roles.
 
