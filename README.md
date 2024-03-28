@@ -1,16 +1,22 @@
-
 # From RAG to autonomous apps with Weaviate and Gemini on Google Kubernetes Engine
-![Next Demo Achitecture](https://github.com/bkauf/next-store/blob/main/diagram.png)
 
+![Next Demo Achitecture](https://github.com/bkauf/next-store/blob/main/diagram.png)
 
 To Deploy this demo...
 
-
 ## Setup the Weaviate Vector Database
+
+1. enable the nessessary APIs
+
+````sh
+
+gcloud services enable artifactregistry.googleapis.com
+```
+
 
 1. Deploy the GKE Cluster
 
-1. Install Weaviate 
+1. Install Weaviate
 
 1. load the sample data into weaviate(python script provided)
 
@@ -25,26 +31,44 @@ Go to https://developers.generativeai.google/ to create a PALM API key. This is 
 
 1. Create your storage bucket
 
-1. create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this locally and not in cloud build on GCP you will need a service account, see option section below for more details. 
+1. create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this locally and not in cloud build on GCP you will need a service account, see option section below for more details.
 
 
-```sh 
+```sh
 GEMINI_API_KEY="From step 1"
 GCS_BUCKET="storage bucket name"
 WEAVIATE_SERVER="from weaviate install steps"
 WEAVIATE_API_KEY="next-demo349834"
 #If you plan to run this locally you will need the following sevice account varable
 #GOOGLE_APPLICATION_CREDENTIALS="sa.json"
-```
+````
 
-1. Create a container repo 
+1. Create a artifact registry repo for your container
+
+`````sh
+export REPO=[Your Repo Name]
+export LOCATION="us-central1"
+gcloud artifacts repositories create $REPO \
+    --repository-format=docker \
+    --location=$LOCATION \
+    --description="Next Store Demo"
 
 1. Create a container
 
 ```sh
-gcloud run deploy [Name] \
-    --image us-central1-docker.pkg.dev/[Project ID]/Repo]/
-    ```
+export PROJECT_ID=[Your Project ID]
+export REPO=[Your Repo Name]
+export CLOUD_RUN_NAME="next-store"
+gcloud builds submit --tag $LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO/next-demo:1.0
+
+```
+
+1. Deploy to cloud run
+
+```sh
+gcloud run deploy $CLOUD_RUN_NAME \
+    --image us-central1-docker.pkg.dev/$PROJECTID/$Repo/next-demo:1.0
+```
 
 1. create a service account for cloud build to use to connect to GCS for image uploads
 
@@ -52,17 +76,15 @@ gcloud run deploy [Name] \
 
 ```sh
 TBD
-```
+`````
 
-
-
-Navigate to the demo application 
+Navigate to the demo application
 Sample product to upload
 
 ```sh
-  
+
         "title": "Project Sushi Tshirt",
         "category": "Clothing  accessories Tops  tees Tshirts",
         "link": "https://shop.googlemerchandisestore.com/store/20190522377/assets/items/images/GGCPGXXX1338.jpg",
-  
+
 ```
