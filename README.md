@@ -12,6 +12,8 @@ To Deploy this demo...
 
 1. Install Weaviate 
 
+1. load the sample data into weaviate(python script provided)
+
 1. Get Weaviate Server IP
 
 ## Setup the Demo application
