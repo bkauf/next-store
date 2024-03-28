@@ -1,6 +1,6 @@
 
 # From RAG to autonomous apps with Weaviate and Gemini on Google Kubernetes Engine
-![Next Demo Achitecture](https://github.com/bkauf/next-store/diagram.png)
+![Next Demo Achitecture](https://github.com/bkauf/next-store/blob/main/diagram.png)
 
 
 To Deploy this demo...
