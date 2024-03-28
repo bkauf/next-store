@@ -3,10 +3,24 @@
 ![Next Demo Achitecture](https://github.com/bkauf/next-store/blob/main/diagram.png)
 
 
-To Deploy this demo...
+To Deploy the basic components needed for this demo we'll follow the following steps.
+- Get your Gemini API key
+- Enable the necessary Google Cloud APIs
+- Deploy the GKE Cluster
+- Install Weaviate
+- Get Weaviate Server IP addresses.
+- Create an Artifact registry
+- Install the demo application
 
+### Get your GEMINI API key
+- Go to https://developers.generativeai.google/ to create a GEMINI API key. This is necessary to be able to run the demo.
+- Set this API key as an environment variable
 
-## Setup the necessary infrastructure and the Weaviate Vector Database
+```sh
+GEMINI_API_KEY=<your Gemini API key>
+```
+
+### Enable the necessary Google Cloud APIs
 Set your project id
 
 ```sh
@@ -39,6 +53,7 @@ clouddeploy.googleapis.com
 
 ```
 
+### Deploy the GKE Cluster
 Create a service account for the GKE cluster
 
 ```sh
@@ -65,24 +80,7 @@ gcloud container clusters create $CLUSTER_NAME \
 
  ```
 
-Create an artifact registry repository ti upload your docker images
-
-```sh
-gcloud artifacts repositories create $AR_NAME \
---location=$REGION \
---repository-format=docker 
-
-```
-
-Get your GEMINI API key
-- Go to https://developers.generativeai.google/ to create a GEMINI API key. This is necessary to be able to run the demo.
-- Set this API key as an environment variable
-
-```sh
-GEMINI_API_KEY=<your Gemini API key>
-```
-
-Install Weaviate 
+### Install Weaviate 
 
 Let's connect to the cluster
 ```sh
@@ -121,7 +119,7 @@ helm upgrade --install weaviate weaviate/weaviate \
 --namespace weaviate --create-namespace
 ```
 
-Get Weaviate Server IPs
+### Get Weaviate Server IPs
 
 ```sh
 HTTP_IP=""
@@ -143,84 +141,13 @@ done
 echo "External GRPC IP obtained: $GRPC_IP"
 ```
 
+### Create an Artifact Registry
+
+```sh
+gcloud artifacts repositories create $AR_NAME \
+--location=$REGION \
+--repository-format=docker 
+
+```
+
 ## Setup the Demo application
-The following steps will walk through adding the nessessary  variables to the demo application, creating a container for it, then running it on Google Cloud Run
-
-Create your storage bucket and store the bucket name. We wrap this in an if-else statement to make the command idempotent
-
-```sh
-# Check if the bucket exists
-GCS_BUCKET=${PROJECT_ID}-product-images
-if gsutil ls -b gs://$GCS_BUCKET; then
-   echo "Bucket gs://$GCS_BUCKET already exists."
-else
-   # Create the bucket if it doesn't exist
-   gcloud storage buckets create gs://$GCS_BUCKET --location=$REGION --project=$PROJECT_ID
-fi
-echo BUCKET NAME is $GCS_BUCKET
-
-```
-
-Create a .env file in the demo-website directory and replace the variables below with your own. 
-
-```sh 
-ENV_FILE="demo-website/.env"
-# Create the .env file (or overwrite if it exists)
-cat > $ENV_FILE << EOF
-GEMINI_API_KEY=$GEMINI_API_KEY
-GCS_BUCKET=$GCS_BUCKET
-WEAVIATE_SERVER=$HTTP_IP
-WEAVIATE_API_KEY=$WEAVIATE_API_KEY
-EOF
-
-echo ".env file created in the demo-website directory."
-
-```
-
-Build and push the container to the artifact registry 
-```sh
-gcloud builds submit --config=demo-website/cloudbuild.yaml \
---substitutions=_PROJECT_ID=${PROJECT_ID},\
-_REPO_URL=${REGION}-docker.pkg.dev,\
-_IMAGE_REPO=$AR_NAME,\
-_IMAGE_NAME=website
-```
-
-Create a service account for cloud run
-```sh
-CLOUDRUN_SA_NAME=cloudrun-sa
-gcloud iam service-accounts create $CLOUDRUN_SA_NAME --display-name="Cloud Run service account"
-```
-Add the necessary roles to the SA
-
-```sh
-gcloud projects add-iam-policy-binding $PROJECT_ID  \
---member=serviceAccount:$CLOUDRUN_SA_NAME@$PROJECT_ID.iam.gserviceaccount.com \
---role=roles/storage.objectUser
-```
-
-Create a cloud run instance
-
-```sh
-gcloud run deploy website \
---image=${REGION}-docker.pkg.dev/$PROJECT_ID/$AR_NAME/website:latest \
---service-account=$CLOUDRUN_SA_NAME@$PROJECT_ID.iam.gserviceaccount.com \
---region=$REGION \
---allow-unauthenticated \
---set-env-vars=GEMINI_API_KEY=$GEMINI_API_KEY,\
-GCS_BUCKET=$GCS_BUCKET,\
-GOOGLE_STORAGE_PROJECT_ID=$PROJECT_ID,\
-WEAVIATE_API_KEY=$WEAVIATE_API_KEY,\
-WEAVIATE_SERVER="http://${HTTP_IP}"
-
-```
-
-Navigate to the demo application 
-Sample product to upload
-
-```sh
-  "title": "Project Sushi Tshirt",
-  "category": "Clothing  accessories Tops  tees Tshirts",
-  "link": "https://shop.googlemerchandisestore.com/store/20190522377/assets/items/images/GGCPGXXX1338.jpg",
-
-```
