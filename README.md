@@ -7,11 +7,106 @@ To Deploy this demo...
 
 
 ## Setup the Weaviate Vector Database
+1. Set your project id
 
-1. Deploy the GKE Cluster
+```sh
+export PROJECT_ID=<your project id>
+gcloud config set core/project $PROJECT_ID
+```
+
+1. Enable the necessary APIs for your project.
+
+```sh
+
+gcloud services enable \
+cloudbuild.googleapis.com \
+storage.googleapis.com \
+serviceusage.googleapis.com \
+cloudresourcemanager.googleapis.com \
+compute.googleapis.com \
+iam.googleapis.com \
+container.googleapis.com \
+artifactregistry.googleapis.com \
+clouddeploy.googleapis.com
+
+```
+
+1. Create a service account for the GKE cluster
+
+
+```sh
+export CLUSTER_NAME=demo-cluster
+export SA_NAME=$CLUSTER_NAME-sa
+export REGION=us-central1
+
+gcloud iam service-accounts create $SA_NAME --display-name="Demo cluster service account"
+```
+Add the necessary roles to the SA
+
+```sh
+gcloud projects add-iam-policy-binding $PROJECT_ID  \
+--member=serviceAccount:$SA_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+--role=roles/monitoring.metricWriter
+
+gcloud projects add-iam-policy-binding $PROJECT_ID  \
+--member=serviceAccount:$SA_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+--role=roles/artifactregistry.reader
+
+```
+
+1. Deploy a regional GKE Cluster. This step can take several minutes.
+
+```sh 
+gcloud container clusters create $CLUSTER_NAME \
+ --project=$PROJECT_ID \
+ --region=$REGION \
+ --enable-ip-alias \
+ --num-nodes=1 \
+ --service-account=$SA_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+ --scopes=https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring,https://www.googleapis.com/auth/cloud-platform
+
+ ```
+
+
+1. Create an artifact registry
+
+```sh
+gcloud artifacts repositories create demo-registry \
+--location=$REGION \
+--repository-format=docker 
+
+```
+1.  Get your PALM API key
+Go to https://developers.generativeai.google/ to create a PALM API key. This is necessary to be able to run the demo.
+Set your palm API key as an environment variable
+
+```sh
+export $PALM_API_KEY=<your palm api key>
+```
 
 1. Install Weaviate 
 
+Let's connect to the cluster
+```sh
+gcloud container clusters get-credentials $CLUSTER_NAME --region $REGION --project $PROJECT_ID
+```
+
+We are going to use the regional persistant disk storage class for weaviate, so we'll install that storage class in the cluster.
+
+```sh
+kubectl install -f weaviate/storage-class.yaml
+```
+Let's install Weaviate
+
+```sh
+helm repo add weaviate https://weaviate.github.io/weaviate-helm
+
+helm upgrade --install weaviate weaviate/weaviate \
+-f weaviate/demo-values.yaml \
+--set modules.generative-palm.apiKey=$PALM_API_KEY \
+--set modules.text2vec-palm.apiKey=$PALM_API_KEY \
+--namespace weaviate --create-namespace
+```
 1. Get Weaviate Server IP
 
 ## Setup the Demo application

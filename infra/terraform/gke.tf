@@ -55,19 +55,5 @@ module "gke" {
     ]
   }
 
-  node_pools_labels = {
-    all = {}
-
-    default-node-pool = {
-      default-node-pool = true
-    }
-  }
-  node_pools_tags = {
-    all = []
-
-    default-node-pool = [
-      "default-pool",
-    ]
-  }
 }
 

@@ -92,7 +92,6 @@ echo -e "\e[95mCreating GCS Bucket called ${PROJECT_ID} to store terraform state
 echo -e "\e[95mCreating Helm Builder...\e[0m" && \
 gcloud builds submit --config=infra/builds/build_helm_builder.yaml --substitutions=_PROJECT_ID=${PROJECT_ID}
 
-
 # Start terraform 
 [[ "${DESTROY}" != "true" ]] && \
 [[ "${APPLICATION}" != "true" ]] && \
