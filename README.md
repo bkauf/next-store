@@ -1,9 +1,9 @@
 
+# From RAG to autonomous apps with Weaviate and Gemini on Google Kubernetes Engine
+![Next Demo Achitecture](https://github.com/bkauf/next-store/diagram.png)
 
 
-
-# Deploy this demo
-
+To Deploy this demo...
 
 
 ## Setup the Weaviate Vector Database
@@ -15,7 +15,7 @@
 1. Get Weaviate Server IP
 
 ## Setup the Demo application
-
+The following steps will walk through adding the nessessary  variables to the demo application, creating a container for it, then running it on Google Cloud Run
 
 
 1.  Get your PALM API key
@@ -36,6 +36,8 @@ WEAVIATE_API_KEY="next-demo349834"
 
 ``
 
+1. Create a container repo 
+
 1. Create a container
 
 ```sh
@@ -43,6 +45,7 @@ gcloud run deploy [Name] \
     --image us-central1-docker.pkg.dev/[Project ID]/Repo]/
     ```
 
+1. create a service account for cloud build to use to connect to GCS for image uploads
 
 1. Launch it to Cloud Build
 
