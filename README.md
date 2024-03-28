@@ -137,13 +137,4 @@ done
 echo "External GRPC IP obtained: $GRPC_IP"
 ```
 
-### Create an Artifact Registry
-
-```sh
-gcloud artifacts repositories create $AR_NAME \
---location=$REGION \
---repository-format=docker 
-
-```
-
 ## Setup the Demo application
