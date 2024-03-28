@@ -6,8 +6,8 @@
 To Deploy this demo...
 
 
-## Setup the Weaviate Vector Database
-1. Set your project id
+## Setup the necessary infrastructure and the Weaviate Vector Database
+Set your project id
 
 ```sh
 PROJECT_ID=<your project id>
@@ -39,7 +39,7 @@ clouddeploy.googleapis.com
 
 ```
 
-1. Create a service account for the GKE cluster
+Create a service account for the GKE cluster
 
 ```sh
 gcloud iam service-accounts create $SA_NAME --display-name="Demo cluster service account"
@@ -82,7 +82,7 @@ Get your GEMINI API key
 GEMINI_API_KEY=<your Gemini API key>
 ```
 
-1. Install Weaviate 
+Install Weaviate 
 
 Let's connect to the cluster
 ```sh
