@@ -8,7 +8,7 @@ To Deploy this demo...
 
 1. enable the nessessary APIs
 
-````sh
+```sh
 
 gcloud services enable artifactregistry.googleapis.com
 ```
