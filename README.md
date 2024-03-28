@@ -13,16 +13,16 @@ To Deploy this demo...
 PROJECT_ID=<your project id>
 gcloud config set core/project $PROJECT_ID
 ```
-1. Set some environment variables
+Set some environment variables
 
 ```sh
-CLUSTER_NAME=demo-cluster
-SA_NAME=$CLUSTER_NAME-sa
-REGION=us-central1
-AR_NAME=demo-registry
+CLUSTER_NAME=demo-cluster # A name for your cluster
+SA_NAME=$CLUSTER_NAME-sa # A name for your service account
+REGION=us-central1 # Google cloud region to host your infrastucture
+AR_NAME=demo-registry # name for your artifact registry repo
 
 ```
-1. Enable the necessary APIs for your project.
+Enable the necessary Google cloud APIs for your project.
 
 ```sh
 
@@ -44,7 +44,7 @@ clouddeploy.googleapis.com
 ```sh
 gcloud iam service-accounts create $SA_NAME --display-name="Demo cluster service account"
 ```
-Add the necessary roles to the SA
+Add the necessary roles to the GKE service account
 
 ```sh
 gcloud projects add-iam-policy-binding $PROJECT_ID  \
@@ -52,7 +52,7 @@ gcloud projects add-iam-policy-binding $PROJECT_ID  \
 --role=roles/monitoring.metricWriter
 ```
 
-1. Deploy a regional GKE Cluster. This step can take several minutes.
+Deploy a small regional GKE Cluster. This step can take several minutes to finish.
 
 ```sh 
 gcloud container clusters create $CLUSTER_NAME \
@@ -65,8 +65,7 @@ gcloud container clusters create $CLUSTER_NAME \
 
  ```
 
-
-1. Create an artifact registry
+Create an artifact registry repository ti upload your docker images
 
 ```sh
 gcloud artifacts repositories create $AR_NAME \
@@ -74,12 +73,13 @@ gcloud artifacts repositories create $AR_NAME \
 --repository-format=docker 
 
 ```
-1.  Get your GEMINI API key
-Go to https://developers.generativeai.google/ to create a GEMINI API key. This is necessary to be able to run the demo.
-Set this API key as an environment variable
+
+Get your GEMINI API key
+- Go to https://developers.generativeai.google/ to create a GEMINI API key. This is necessary to be able to run the demo.
+- Set this API key as an environment variable
 
 ```sh
-GEMINI_API_KEY=<your Gemini api key>
+GEMINI_API_KEY=<your Gemini API key>
 ```
 
 1. Install Weaviate 
@@ -95,16 +95,21 @@ We are going to use the regional persistant disk storage class for weaviate, so 
 kubectl apply -f weaviate/storage-class.yaml
 ```
 
-Let's create a secret API KEY for weaviate so we don't allow unauthenticated access
+Let's create a secret API KEY for weaviate so we don't allow unauthenticated access.
 
 ```sh
-WEAVIATE_API_KEY=<some secret key string>
+WEAVIATE_API_KEY=<some secret key string> # use any random string, make sure you save it
+```
+Let's store the key as a kubernetes secret.
+
+```sh
 kubectl create namespace weaviate
+
 kubectl create secret generic user-keys \
 --from-literal=AUTHENTICATION_APIKEY_ALLOWED_KEYS=$WEAVIATE_API_KEY \
 -n weaviate
 ```
-Let's install Weaviate
+Let's install Weaviate using a helm chart.
 
 ```sh
 helm repo add weaviate https://weaviate.github.io/weaviate-helm
@@ -115,7 +120,8 @@ helm upgrade --install weaviate weaviate/weaviate \
 --set modules.text2vec-palm.apiKey=$GEMINI_API_KEY \
 --namespace weaviate --create-namespace
 ```
-1. Get Weaviate Server IPs
+
+Get Weaviate Server IPs
 
 ```sh
 HTTP_IP=""
@@ -140,7 +146,7 @@ echo "External GRPC IP obtained: $GRPC_IP"
 ## Setup the Demo application
 The following steps will walk through adding the nessessary  variables to the demo application, creating a container for it, then running it on Google Cloud Run
 
-1. Create your storage bucket and store the bucket name. We wrap this in an if-else statement to make the command idempotent
+Create your storage bucket and store the bucket name. We wrap this in an if-else statement to make the command idempotent
 
 ```sh
 # Check if the bucket exists
@@ -155,11 +161,7 @@ echo BUCKET NAME is $GCS_BUCKET
 
 ```
 
-1. create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this locally and not in cloud build on GCP you will need a service account, see option section below for more details. 
-
-
-#If you plan to run the application container locally, you will need the following sevice account variable to the .env file
-#GOOGLE_APPLICATION_CREDENTIALS="sa.json"
+Create a .env file in the demo-website directory and replace the variables below with your own. 
 
 ```sh 
 ENV_FILE="demo-website/.env"
@@ -175,7 +177,7 @@ echo ".env file created in the demo-website directory."
 
 ```
 
-1. Build and push the container to the artifact registry 
+Build and push the container to the artifact registry 
 ```sh
 gcloud builds submit --config=demo-website/cloudbuild.yaml \
 --substitutions=_PROJECT_ID=${PROJECT_ID},\
@@ -183,7 +185,8 @@ _REPO_URL=${REGION}-docker.pkg.dev,\
 _IMAGE_REPO=$AR_NAME,\
 _IMAGE_NAME=website
 ```
-1. Create a service account for cloud run
+
+Create a service account for cloud run
 ```sh
 CLOUDRUN_SA_NAME=cloudrun-sa
 gcloud iam service-accounts create $CLOUDRUN_SA_NAME --display-name="Cloud Run service account"
@@ -195,7 +198,8 @@ gcloud projects add-iam-policy-binding $PROJECT_ID  \
 --member=serviceAccount:$CLOUDRUN_SA_NAME@$PROJECT_ID.iam.gserviceaccount.com \
 --role=roles/storage.objectUser
 ```
-1. Create a cloud run instance
+
+Create a cloud run instance
 
 ```sh
 gcloud run deploy website \
