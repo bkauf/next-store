@@ -9,7 +9,6 @@ To Deploy the basic components needed for this demo we'll follow the following s
 - Deploy the GKE Cluster
 - Install Weaviate
 - Get Weaviate Server IP addresses.
-- Create an Artifact registry
 - Install the demo application
 
 ### Get your GEMINI API key
