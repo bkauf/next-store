@@ -44,7 +44,7 @@ gcloud storage buckets add-iam-policy-binding gs://$BUCKET_NAME --member=allUser
 ```
 
 
-1. Creaet an ENV file for the demo application
+1. Create a .env file for the demo application
 
 create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this locally and not in cloud build on GCP you will need a service account, see option section below for more details.
 
@@ -79,20 +79,23 @@ gcloud builds submit --tag $LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO/next-demo:
 
 ```
 
-1. Deploy to cloud run
+
+1. Create a service account for Cloud Run to use to connect to GCS for image uploads
+
 
 ```sh
+tbd
+```
+1. Deploy the Container to Cloud Run
+
+
+```sh
+export PROJECT_ID="[Your Project ID]"
+
 gcloud run deploy $CLOUD_RUN_NAME \
-    --image us-central1-docker.pkg.dev/$PROJECTID/$Repo/next-demo:1.0
+    --image us-central1-docker.pkg.dev/$PROJECT_ID/$REPO/next-demo:1.0
 ```
 
-1. create a service account for cloud build to use to connect to GCS for image uploads
-
-1. Launch it to Cloud Build
-
-```sh
-TBD
-`````
 
 Navigate to the demo application
 Sample product to upload
