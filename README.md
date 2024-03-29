@@ -58,7 +58,7 @@ WEAVIATE_API_KEY="next-demo349834"
 
 1. Create a artifact registry repo for your container
 
-`````sh
+```sh
 export REPO=[Your Repo Name]
 export LOCATION="us-central1"
 gcloud artifacts repositories create $REPO \
