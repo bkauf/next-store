@@ -31,7 +31,6 @@ Go to https://developers.generativeai.google/ to create a PALM API key. This is 
 
 1. Create your storage bucket and allow public access to it.
 
-
 ```sh
 export BUCKET_NAME="[your bucket name]"
 export BUCKET_LOCATION="us-central1"
@@ -40,9 +39,7 @@ gcloud storage buckets create gs://$BUCKET_NAME --location=$BUCKET_LOCATION \
 --no-public-access-prevention 
 
 gcloud storage buckets add-iam-policy-binding gs://$BUCKET_NAME --member=allUsers --role=roles/storage.objectViewer
-
 ```
-
 
 1. Create a .env file for the demo application
 
