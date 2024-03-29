@@ -66,6 +66,7 @@ gcloud artifacts repositories create $REPO \
     --location=$LOCATION \
     --description="Next Store Demo"
 ```
+
 1. Create a container
 
 ```sh
