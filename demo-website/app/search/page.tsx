@@ -57,7 +57,7 @@ const page = () => {
             <input
               id="search"
               name="search"
-              className="bg-gray-100 w-96 m-2 p-1"
+              className="bg-gray-100 w-96 m-2 p-1 border"
               onChange={(event) => setSearch(event.target.value)}
               //@ts-ignore
               value={search}
@@ -65,7 +65,7 @@ const page = () => {
           </li>
           <li>
             <label>Choose a Category:</label>
-            <select id="category" name="category" className="w-24"
+            <select id="category" name="category" className="w-24  m-2 p-1 border"
               onChange={(event) => setCategory(event.target.value)}
               //@ts-ignore
               value={category}>
@@ -84,7 +84,7 @@ const page = () => {
             <button
               type="submit"
               onClick={productSearch}
-              className="bg-indigo-500 text-white mb-2 mt-3 hover:bg-grey-300 ld py-2 px-4 rounded"
+              className="bg-indigo-500 border text-white mb-2 mt-3 hover:bg-grey-300 ld py-2 px-4 rounded"
             >
               Search
             </button>

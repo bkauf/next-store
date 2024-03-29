@@ -10,10 +10,7 @@ module.exports = {
   ],
   
     theme: {
-      colors: {
-        'main-bg-color': '#02172F',
-        'text-gray-color': '#fff'
-      },
+     
   },
   plugins: [],
 }
