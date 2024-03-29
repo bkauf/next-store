@@ -29,19 +29,32 @@ The following steps will walk through adding the nessessary  variables to the de
 1.  Get your PALM API key
 Go to https://developers.generativeai.google/ to create a PALM API key. This is necessary to be able to run the demo.
 
-1. Create your storage bucket
+1. Create your storage bucket and allow public access to it.
+
+
+```sh
+export BUCKET_NAME="[your bucket name]"
+export BUCKET_LOCATION="us-central1"
+
+gcloud storage buckets create gs://$BUCKET_NAME --location=$BUCKET_LOCATION \
+--no-public-access-prevention 
+
+gcloud storage buckets add-iam-policy-binding gs://$BUCKET_NAME --member=allUsers --role=roles/storage.objectViewer
+
+```
+
 
 1. create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this locally and not in cloud build on GCP you will need a service account, see option section below for more details.
 
 
 ```sh
 GEMINI_API_KEY="From step 1"
-GCS_BUCKET="storage bucket name"
+GCS_BUCKET="storage bucket name from BUCKET_NAME"
 WEAVIATE_SERVER="from weaviate install steps"
 WEAVIATE_API_KEY="next-demo349834"
 #If you plan to run this locally you will need the following sevice account varable
 #GOOGLE_APPLICATION_CREDENTIALS="sa.json"
-````
+```
 
 1. Create a artifact registry repo for your container
 
