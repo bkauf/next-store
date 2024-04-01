@@ -1,20 +1,26 @@
 # From RAG to autonomous apps with Weaviate and Gemini on Google Kubernetes Engine
 
-This demo application creates a product catalog that is stored in a database and vectorized for semantic search. It is also integrated into the [Gemini Pro Vision](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://console.cloud.google.com/vertex-ai/publishers/google/model-garden/gemini-pro-vision) API to automatically create product descriptions. 
+This demo application creates a product catalog that is stored in a database and vectorized for semantic search. It is also integrated into the [Gemini Pro Vision](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://console.cloud.google.com/vertex-ai/publishers/google/model-garden/gemini-pro-vision) API to automatically create product descriptions.
 
 ![Next Demo Achitecture](https://github.com/bkauf/next-store/blob/main/diagram.png)
 
-To Deploy this demo...
+## To Deploy this demo...
 
-## Enable the Nessessary APIs
+clone this git repo
 
+```sh
+git clone https://github.com/bkauf/next-store.git
+```
+
+### Enable the Nessessary APIs
 
 ```sh
 
 gcloud services enable artifactregistry.googleapis.com
+gcloud services enable cloudbuild.googleapis.com
 ```
 
-## Setup the Weaviate Vector Database
+### Setup the Weaviate Vector Database
 
 1. Deploy the GKE Cluster
 
@@ -24,7 +30,7 @@ gcloud services enable artifactregistry.googleapis.com
 
 1. Get Weaviate Server IP
 
-## Setup the Demo application
+### Setup the Demo application
 
 The following steps will walk through adding the nessessary variables to the demo application, creating a container for it, then running it on Google Cloud Run
 
@@ -33,18 +39,31 @@ The following steps will walk through adding the nessessary variables to the dem
 
 1.  Create your storage bucket and allow public access to it.
 
-```sh
-export BUCKET_NAME="[your bucket name]"
-export BUCKET_LOCATION="us-central1"
+Create the bucket
 
-gcloud storage buckets create gs://$BUCKET_NAME --location=$BUCKET_LOCATION \
+```sh
+export GCS_BUCKET="[your bucket name]"
+export LOCATION="us-central1"
+
+gcloud storage buckets create gs://$GCS_BUCKET --location=$LOCATION \
 --no-public-access-prevention
+```
+
+Allow public access to the bucket
+
+```sh
 
 gcloud storage buckets add-iam-policy-binding gs://$BUCKET_NAME --member=allUsers --role=roles/storage.objectViewer
 ```
 
 1.  Create a .env file for the demo application
-create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this locally and not in cloud build on GCP you will need a service account, see option section below for more details.
+
+```sh
+ cd next-store/demo-website/
+ touch .env
+```
+
+Create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this demo app locally with 'npm run dev' you will need a service account, see option section below for more details. If you would like to run this on Cloud Run you do not need a local service account.
 
 ```sh
 GEMINI_API_KEY="From step 1"
@@ -56,52 +75,64 @@ WEAVIATE_API_KEY="next-demo349834"
 ```
 
 1. Create a artifact registry repo for your container
-```sh
-export REPO=[Your Repo Name]
-export LOCATION="us-central1"
-gcloud artifacts repositories create $REPO \
-    --repository-format=docker \
-    --location=$LOCATION \
-    --description="Next Store Demo"
-```
-
-1. Create a container
 
 ```sh
-export PROJECT_ID=[Your Project ID]
-export REPO=[Your Repo Name]
+export REPO_NAME="next-demo"
 
-gcloud builds submit --tag $LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO/next-demo:1.0
+gcloud artifacts repositories create $REPO_NAME --repository-format=docker \
+    --location=$LOCATION --description="Docker repository" \
+    --project=$PROJECT_ID
 
-```
+
+
+1. Create a container image to store in the image repo
+
+```sh
+
+gcloud builds submit --tag $LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/next-demo:1.0
+
+````
 
 1. Create a service account for Cloud Run to use to connect to GCS for image uploads
-   GOOGLE_STORAGE_PROJECT_ID
+
 
 ```sh
-tbd
+export SERVICE_ACCOUNT_NAME="next-demo"
+
+gcloud iam service-accounts create $SERVICE_ACCOUNT_NAME \
+  --display-name="Next Demo"
+
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+  --member="serviceAccount:$SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com" \
+  --role="roles/storage.objectAdmin"
 ```
 
 1. Deploy the Container to Cloud Run
 
+The following commands set your envorinemnt varaibles for Cloud Run and also the service account that allows uploads to your public Google Cloud Storage bucket.
+
 ```sh
-export PROJECT_ID="[Your Project ID]"
+
 export CLOUD_RUN_NAME="next-store"
 export WEAVIATE_API_KEY="next-demo349834"
+export WEAVIATE_SERVER="[server IP]"
+export GEMINI_API_KEY="From step 1"
 
 
 gcloud run deploy $CLOUD_RUN_NAME \
-    --image $LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO/next-demo:1.0 \
-    ---port=3000 \
+    --image $LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/next-demo:1.0 \
+    --port=3000 \
     --allow-unauthenticated \
+    --region $LOCATION \
   --set-env-vars=GEMINI_API_KEY=$GEMINI_API_KEY, \
-  GCS_BUCKET=$GCS_BUCKET, \
-  WEAVIATE_SERVER=$WEAVIATE_SERVER, \
-  WEAVIATE_API_KEY=$WEAVIATE_API_KEY
+  --set-env-vars=GCS_BUCKET=$GCS_BUCKET, \
+  --set-env-vars=WEAVIATE_SERVER=$WEAVIATE_SERVER, \
+  --set-env-vars=WEAVIATE_API_KEY=$WEAVIATE_API_KEY \
+  --service-account=$SERVICE_ACCOUNT_NAME
+  
 ```
 
-Navigate to the demo application
-Sample product to upload
+Navigate to the demo application via he service URL returned. You can use the same data below to create a new item:
 
 ```sh
 
