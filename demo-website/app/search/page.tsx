@@ -13,9 +13,7 @@ interface Product {
   };
 }
 
-
 const page = () => {
-
   const [resultsAry, setResultsAry] = useState([]);
 
   const [search, setSearch] = useState("");
@@ -23,7 +21,7 @@ const page = () => {
 
   const productSearch = async () => {
     axios
-      .get("/api/weaviate/search?s="+search+"&f="+category)
+      .get("/api/weaviate/search?s=" + search + "&f=" + category)
       .then((response) => {
         // Handle successful response
         console.log("Response data:", response.data);
@@ -53,22 +51,26 @@ const page = () => {
       <div className="relative inline-block text-black text-left">
         <ul>
           <li>
-            <label>Search Term:</label>{" "}
+            <label className="text-black">Search Term:</label>{" "}
             <input
               id="search"
               name="search"
-              className="bg-gray-100 w-96 m-2 p-1 border"
+              className="bg-gray-100 w-96 m-2 p-1 border text-black"
               onChange={(event) => setSearch(event.target.value)}
               //@ts-ignore
               value={search}
             />
           </li>
           <li>
-            <label>Choose a Category:</label>
-            <select id="category" name="category" className="w-24  m-2 p-1 border"
+            <label className="text-black">Choose a Category:</label>
+            <select
+              id="category"
+              name="category"
+              className="w-24  m-2 p-1 border text-black"
               onChange={(event) => setCategory(event.target.value)}
               //@ts-ignore
-              value={category}>
+              value={category}
+            >
               <option value="" defaultValue=""></option>
               <option value="Clothing">Clothing</option>
               <option value="Hoodies">Hoodies</option>
@@ -91,7 +93,6 @@ const page = () => {
           </li>
         </ul>
       </div>
-
 
       <div className="w-full ">
         {resultsAry.length >= 1 ? (
