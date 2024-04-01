@@ -16,8 +16,6 @@ gcloud services enable artifactregistry.googleapis.com
 
 ## Setup the Weaviate Vector Database
 
-1. enable the nessessary APIs
-
 1. Deploy the GKE Cluster
 
 1. Install Weaviate
