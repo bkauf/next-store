@@ -6,6 +6,14 @@ This demo application creates a product catalog that is stored in a database and
 
 To Deploy this demo...
 
+## Enable the Nessessary APIs
+
+
+```sh
+
+gcloud services enable artifactregistry.googleapis.com
+```
+
 ## Setup the Weaviate Vector Database
 
 1. enable the nessessary APIs
