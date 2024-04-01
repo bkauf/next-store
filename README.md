@@ -42,7 +42,7 @@ The following steps will walk through adding the nessessary variables to the dem
 Create the bucket
 
 ```sh
-export GCS_BUCKET="[your bucket name]"
+export GCS_BUCKET="next-demo"
 export LOCATION="us-central1"
 
 gcloud storage buckets create gs://$GCS_BUCKET --location=$LOCATION \
@@ -67,7 +67,7 @@ Create a .env file in the demo-website directory and replace the variables below
 
 ```sh
 GEMINI_API_KEY="From step 1"
-GCS_BUCKET="storage bucket name from BUCKET_NAME"
+GCS_BUCKET="next-demo"
 WEAVIATE_SERVER="from weaviate install steps"
 WEAVIATE_API_KEY="next-demo349834"
 #If you plan to run this locally you will need the following sevice account varable
