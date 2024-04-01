@@ -75,7 +75,7 @@ WEAVIATE_API_KEY="next-demo349834"
 #GOOGLE_APPLICATION_CREDENTIALS="sa.json"
 ```
 
-1. Create a artifact registry repo for your container and build it
+4. Create a artifact registry repo for your container and build it
 
 ```sh
 export REPO_NAME="next-demo"
@@ -86,7 +86,7 @@ gcloud artifacts repositories create $REPO_NAME --repository-format=docker \
 ```
 
 
-2. Create a container image to store in the image repo
+5. Create a container image to store in the image repo
 
 ```sh
 
@@ -94,7 +94,7 @@ gcloud builds submit --tag $LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/next-
 
 ```
 
-3. Create a service account for Cloud Run to use to connect to GCS for image uploads
+6. Create a service account for Cloud Run to use to connect to GCS for image uploads
 
 
 ```sh
@@ -108,7 +108,7 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
   --role="roles/storage.objectAdmin"
 ```
 
-4. Deploy the Container to Cloud Run
+7. Deploy the Container to Cloud Run
 
 The following commands set your envorinemnt varaibles for Cloud Run and also the service account that allows uploads to your public Google Cloud Storage bucket.
 
