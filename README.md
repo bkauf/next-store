@@ -58,7 +58,7 @@ The following steps will walk through adding the nessessary variables to the dem
 
     ```sh
 
-    gcloud storage buckets add-iam-policy-binding gs://$BUCKET_NAME --member=allUsers --role=roles/storage.objectViewer
+    gcloud storage buckets add-iam-policy-binding gs://$GCS_BUCKET --member=allUsers --role=roles/storage.objectViewer
     ```
 
 1.  Create a .env file for the demo application.
