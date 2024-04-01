@@ -75,15 +75,15 @@ WEAVIATE_API_KEY="next-demo349834"
 #GOOGLE_APPLICATION_CREDENTIALS="sa.json"
 ```
 
-    1. Create a artifact registry repo for your container
+1. Create a artifact registry repo for your container and build it
 
-    ```sh
-    export REPO_NAME="next-demo"
+```sh
+export REPO_NAME="next-demo"
 
-    gcloud artifacts repositories create $REPO_NAME --repository-format=docker \
-        --location=$LOCATION --description="Docker repository" \
-        --project=$PROJECT_ID
-    ```
+gcloud artifacts repositories create $REPO_NAME --repository-format=docker \
+    --location=$LOCATION --description="Docker repository" \
+    --project=$PROJECT_ID
+```
 
 
 2. Create a container image to store in the image repo
