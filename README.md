@@ -48,8 +48,8 @@ compute.googleapis.com \
 iam.googleapis.com \
 container.googleapis.com \
 artifactregistry.googleapis.com \
-clouddeploy.googleapis.com
-
+clouddeploy.googleapis.com \
+cloudrun.googleapis.com
 ```
 
 #### Deploy the GKE Cluster
