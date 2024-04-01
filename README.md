@@ -44,7 +44,6 @@ gcloud storage buckets add-iam-policy-binding gs://$BUCKET_NAME --member=allUser
 ```
 
 1.  Create a .env file for the demo application
-
 create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this locally and not in cloud build on GCP you will need a service account, see option section below for more details.
 
 ```sh
@@ -57,7 +56,6 @@ WEAVIATE_API_KEY="next-demo349834"
 ```
 
 1. Create a artifact registry repo for your container
-
 ```sh
 export REPO=[Your Repo Name]
 export LOCATION="us-central1"
