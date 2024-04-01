@@ -40,12 +40,11 @@ gcloud services enable cloudrun.googleapis.com
 
 The following steps will walk through adding the nessessary variables to the demo application, creating a container for it, then running it on Google Cloud Run
 
-1.  Get your PALM API key
-    Go to https://developers.generativeai.google/ to create a PALM API key. This is necessary to be able to run the demo.
+1.  Get your Gemini API key
+    Go to https://developers.generativeai.google/ to create a Gemini API key. This is necessary to be able to run the demo.
 
 1.  Create your storage bucket and allow public access to it.
 
-    Create the bucket
 
     ```sh
     export GCS_BUCKET="next-demo"
@@ -64,87 +63,81 @@ The following steps will walk through adding the nessessary variables to the dem
 
 1.  Create a .env file for the demo application
 
-```sh
-cd demo-website/
-touch .env
-```
+    ```sh
+    cd demo-website/
+    touch .env
+    ```
 
-Create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this demo app locally with *npm run dev* you will need a service account that has GCS object admin permissions, see option section below for more details. If you would like to run this on Cloud Run you do not need a local service account.
+    Create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this demo app locally with *npm run dev* you will need a service account that has GCS object admin permissions, see option section below for more details. If you would like to run this on Cloud Run you do not need a local service account.
 
-**.env file** 
-```sh
-GEMINI_API_KEY="From step 1"
-GCS_BUCKET="next-demo"
-WEAVIATE_SERVER="from weaviate install steps"
-WEAVIATE_API_KEY="next-demo349834"
-#If you plan to run this locally you a sevice account file with GCS object admin permissions
-#GOOGLE_APPLICATION_CREDENTIALS="sa.json"
-```
+    **.env file** 
+    ```sh
+    GEMINI_API_KEY="From step 1"
+    GCS_BUCKET="next-demo"
+    WEAVIATE_SERVER="from weaviate install steps"
+    WEAVIATE_API_KEY="next-demo349834"
+    #If you plan to run this locally you a sevice account file with GCS object admin permissions
+    #GOOGLE_APPLICATION_CREDENTIALS="sa.json"
+    ```
 
-4. Create a artifact registry repo for your container and build it
+1. Create a artifact registry repo for your container and build it
 
-```sh
-export REPO_NAME="next-demo"
+    ```sh
+    export REPO_NAME="next-demo"
 
-gcloud artifacts repositories create $REPO_NAME --repository-format=docker \
-    --location=$LOCATION --description="Docker repository" \
-    --project=$PROJECT_ID
-```
-
-
-5. Create a container image to store in the image repo
-
-```sh
-
-gcloud builds submit --tag $LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/next-demo:1.0
-
-```
-
-6. Create a service account for Cloud Run to use to connect to GCS for image uploads
+    gcloud artifacts repositories create $REPO_NAME --repository-format=docker \
+        --location=$LOCATION --description="Docker repository" \
+        --project=$PROJECT_ID
+    ```
 
 
-```sh
-export SERVICE_ACCOUNT_NAME="next-demo"
+1. Create a container image to store in the image repo
 
-gcloud iam service-accounts create $SERVICE_ACCOUNT_NAME \
-  --display-name="Next Demo"
+    ```sh
+    gcloud builds submit --tag $LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/next-demo:1.0
+    ```
 
-gcloud projects add-iam-policy-binding $PROJECT_ID \
-  --member="serviceAccount:$SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com" \
-  --role="roles/storage.objectAdmin"
-```
+1. Create a service account for Cloud Run to use to connect to GCS for image uploads
 
-7. Deploy the Container to Cloud Run
+    ```sh
+    export SERVICE_ACCOUNT_NAME="next-demo"
 
-The following commands set your envorinemnt varaibles for Cloud Run and also the service account that allows uploads to your public Google Cloud Storage bucket.
+    gcloud iam service-accounts create $SERVICE_ACCOUNT_NAME \
+    --display-name="Next Demo"
 
-```sh
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:$SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com" \
+    --role="roles/storage.objectAdmin"
+    ```
 
-export CLOUD_RUN_NAME="next-store"
-export WEAVIATE_API_KEY="next-demo349834"
-export WEAVIATE_SERVER="[server IP]"
-export GEMINI_API_KEY="From step 1"
+1. Deploy the Container to Cloud Run
 
+    The following commands set your envorinemnt varaibles for Cloud Run and also the service account that allows uploads to your public Google Cloud Storage bucket.
 
-gcloud run deploy $CLOUD_RUN_NAME \
-    --image $LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/next-demo:1.0 \
-    --port=3000 \
-    --allow-unauthenticated \
-    --region $LOCATION \
-  --set-env-vars=GEMINI_API_KEY=$GEMINI_API_KEY, \
-  --set-env-vars=GCS_BUCKET=$GCS_BUCKET, \
-  --set-env-vars=WEAVIATE_SERVER=$WEAVIATE_SERVER, \
-  --set-env-vars=WEAVIATE_API_KEY=$WEAVIATE_API_KEY \
-  --service-account=$SERVICE_ACCOUNT_NAME
-  
-```
+    ```sh
+    export CLOUD_RUN_NAME="next-store"
+    export WEAVIATE_API_KEY="next-demo349834"
+    export WEAVIATE_SERVER="[server IP]"
+    export GEMINI_API_KEY="From step 1"
 
-Navigate to the demo application via the service URL returned. You can use the same data below to create a new item:
+    gcloud run deploy $CLOUD_RUN_NAME \
+        --image $LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/next-demo:1.0 \
+        --port=3000 \
+        --allow-unauthenticated \
+        --region $LOCATION \
+    --set-env-vars=GEMINI_API_KEY=$GEMINI_API_KEY, \
+    --set-env-vars=GCS_BUCKET=$GCS_BUCKET, \
+    --set-env-vars=WEAVIATE_SERVER=$WEAVIATE_SERVER, \
+    --set-env-vars=WEAVIATE_API_KEY=$WEAVIATE_API_KEY \
+    --service-account=$SERVICE_ACCOUNT_NAME
+    ```
 
-```sh
+    Navigate to the demo application via the service URL returned. You can use the same data below to create a new item:
 
-        "title": "Project Sushi Tshirt",
-        "category": "Clothing  accessories Tops  tees Tshirts",
-        "Test image link": "https://shop.googlemerchandisestore.com/store/20190522377/assets/items/images/GGCPGXXX1338.jpg",
+    ```sh
 
-```
+            "title": "Project Sushi Tshirt",
+            "category": "Clothing  accessories Tops  tees Tshirts",
+            "Test image link": "https://shop.googlemerchandisestore.com/store/20190522377/assets/items/images/GGCPGXXX1338.jpg",
+
+    ```
