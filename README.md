@@ -14,6 +14,7 @@ clone this git repo
 
 ```sh
 git clone https://github.com/bkauf/next-store.git
+cd next-store
 ```
 
 ### Enable the Nessessary APIs
@@ -64,13 +65,13 @@ The following steps will walk through adding the nessessary variables to the dem
 1.  Create a .env file for the demo application
 
 ```sh
-cd next-store/demo-website/
+cd demo-website/
 touch .env
 ```
 
-Create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this demo app locally with 'npm run dev' you will need a service account that has GCS object admin permissions, see option section below for more details. If you would like to run this on Cloud Run you do not need a local service account.
+Create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this demo app locally with *npm run dev* you will need a service account that has GCS object admin permissions, see option section below for more details. If you would like to run this on Cloud Run you do not need a local service account.
 
-.env file contents:
+**.env file** 
 ```sh
 GEMINI_API_KEY="From step 1"
 GCS_BUCKET="next-demo"
