@@ -43,7 +43,7 @@ gcloud storage buckets create gs://$BUCKET_NAME --location=$BUCKET_LOCATION \
 gcloud storage buckets add-iam-policy-binding gs://$BUCKET_NAME --member=allUsers --role=roles/storage.objectViewer
 ```
 
-1. Create a .env file for the demo application
+1.  Create a .env file for the demo application
 
 create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this locally and not in cloud build on GCP you will need a service account, see option section below for more details.
 
