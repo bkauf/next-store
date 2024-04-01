@@ -91,7 +91,7 @@ gcloud artifacts repositories create $REPO_NAME --repository-format=docker \
 
 gcloud builds submit --tag $LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/next-demo:1.0
 
-````
+```
 
 1. Create a service account for Cloud Run to use to connect to GCS for image uploads
 
@@ -132,7 +132,7 @@ gcloud run deploy $CLOUD_RUN_NAME \
   
 ```
 
-Navigate to the demo application via he service URL returned. You can use the same data below to create a new item:
+Navigate to the demo application via the service URL returned. You can use the same data below to create a new item:
 
 ```sh
 
