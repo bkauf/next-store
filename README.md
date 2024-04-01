@@ -18,11 +18,6 @@ gcloud services enable artifactregistry.googleapis.com
 
 1. enable the nessessary APIs
 
-```sh
-
-gcloud services enable artifactregistry.googleapis.com
-```
-
 1. Deploy the GKE Cluster
 
 1. Install Weaviate
