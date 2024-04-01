@@ -65,6 +65,7 @@ gcloud storage buckets add-iam-policy-binding gs://$BUCKET_NAME --member=allUser
 
 Create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this demo app locally with 'npm run dev' you will need a service account, see option section below for more details. If you would like to run this on Cloud Run you do not need a local service account.
 
+.env file contents:
 ```sh
 GEMINI_API_KEY="From step 1"
 GCS_BUCKET="next-demo"
@@ -85,7 +86,7 @@ gcloud artifacts repositories create $REPO_NAME --repository-format=docker \
 ```
 
 
-1. Create a container image to store in the image repo
+2. Create a container image to store in the image repo
 
 ```sh
 
@@ -93,7 +94,7 @@ gcloud builds submit --tag $LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/next-
 
 ```
 
-1. Create a service account for Cloud Run to use to connect to GCS for image uploads
+3. Create a service account for Cloud Run to use to connect to GCS for image uploads
 
 
 ```sh
@@ -107,7 +108,7 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
   --role="roles/storage.objectAdmin"
 ```
 
-1. Deploy the Container to Cloud Run
+4. Deploy the Container to Cloud Run
 
 The following commands set your envorinemnt varaibles for Cloud Run and also the service account that allows uploads to your public Google Cloud Storage bucket.
 
