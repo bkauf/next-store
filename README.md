@@ -38,7 +38,7 @@ gcloud services enable cloudrun.googleapis.com
 
 ### Setup the Demo application
 
-The following steps will walk through adding the nessessary variables to the demo application, creating a container for it, then running it on Google Cloud Run
+The following steps will walk through adding the nessessary variables to the demo application, creating a container for it, then running it on Google Cloud Run.
 
 1.  Get your Gemini API key
     Go to https://developers.generativeai.google/ to create a Gemini API key. This is necessary to be able to run the demo.
@@ -61,7 +61,7 @@ The following steps will walk through adding the nessessary variables to the dem
     gcloud storage buckets add-iam-policy-binding gs://$BUCKET_NAME --member=allUsers --role=roles/storage.objectViewer
     ```
 
-1.  Create a .env file for the demo application
+1.  Create a .env file for the demo application.
 
     ```sh
     cd demo-website/
@@ -80,7 +80,7 @@ The following steps will walk through adding the nessessary variables to the dem
     #GOOGLE_APPLICATION_CREDENTIALS="sa.json"
     ```
 
-1. Create a artifact registry repo for your container and build it
+1. Create a artifact registry repo for your container.
 
     ```sh
     export REPO_NAME="next-demo"
@@ -91,13 +91,13 @@ The following steps will walk through adding the nessessary variables to the dem
     ```
 
 
-1. Create a container image to store in the image repo
+1. Create a container image to store in the image repo.
 
     ```sh
     gcloud builds submit --tag $LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/next-demo:1.0
     ```
 
-1. Create a service account for Cloud Run to use to connect to GCS for image uploads
+1. Create a service account for Cloud Run to use to connect to GCS for image uploads.
 
     ```sh
     export SERVICE_ACCOUNT_NAME="next-demo"
@@ -110,7 +110,7 @@ The following steps will walk through adding the nessessary variables to the dem
     --role="roles/storage.objectAdmin"
     ```
 
-1. Deploy the Container to Cloud Run
+1. Deploy the Container to Cloud Run.
 
     The following commands set your envorinemnt varaibles for Cloud Run and also the service account that allows uploads to your public Google Cloud Storage bucket.
 
