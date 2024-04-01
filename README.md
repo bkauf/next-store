@@ -39,29 +39,29 @@ The following steps will walk through adding the nessessary variables to the dem
 
 1.  Create your storage bucket and allow public access to it.
 
-Create the bucket
+    Create the bucket
 
-```sh
-export GCS_BUCKET="next-demo"
-export LOCATION="us-central1"
+    ```sh
+    export GCS_BUCKET="next-demo"
+    export LOCATION="us-central1"
 
-gcloud storage buckets create gs://$GCS_BUCKET --location=$LOCATION \
---no-public-access-prevention
-```
+    gcloud storage buckets create gs://$GCS_BUCKET --location=$LOCATION \
+    --no-public-access-prevention
+    ```
 
-Allow public access to the bucket
+    Allow public access to the bucket
 
-```sh
+    ```sh
 
-gcloud storage buckets add-iam-policy-binding gs://$BUCKET_NAME --member=allUsers --role=roles/storage.objectViewer
-```
+    gcloud storage buckets add-iam-policy-binding gs://$BUCKET_NAME --member=allUsers --role=roles/storage.objectViewer
+    ```
 
-1.  Create a .env file for the demo application
+    1.  Create a .env file for the demo application
 
-```sh
- cd next-store/demo-website/
- touch .env
-```
+    ```sh
+    cd next-store/demo-website/
+    touch .env
+    ```
 
 Create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this demo app locally with 'npm run dev' you will need a service account, see option section below for more details. If you would like to run this on Cloud Run you do not need a local service account.
 
