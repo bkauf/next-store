@@ -56,12 +56,12 @@ The following steps will walk through adding the nessessary variables to the dem
     gcloud storage buckets add-iam-policy-binding gs://$BUCKET_NAME --member=allUsers --role=roles/storage.objectViewer
     ```
 
-    1.  Create a .env file for the demo application
+1.  Create a .env file for the demo application
 
-    ```sh
-    cd next-store/demo-website/
-    touch .env
-    ```
+```sh
+cd next-store/demo-website/
+touch .env
+```
 
 Create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this demo app locally with 'npm run dev' you will need a service account, see option section below for more details. If you would like to run this on Cloud Run you do not need a local service account.
 
