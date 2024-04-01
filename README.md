@@ -22,6 +22,7 @@ git clone https://github.com/bkauf/next-store.git
 
 gcloud services enable artifactregistry.googleapis.com
 gcloud services enable cloudbuild.googleapis.com
+gcloud services enable cloudrun.googleapis.com
 ```
 
 ### Setup the Weaviate Vector Database
