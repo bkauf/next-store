@@ -35,7 +35,7 @@ Set your project id
 PROJECT_ID=<your project id>
 gcloud config set core/project $PROJECT_ID
 ```
-Enable the necessary Google cloud APIs for your project.
+Enable the necessary Google cloud APIs for your project. These APIs are necessary for installing the Weaviate database and to run the Demo app.
 
 ```sh
 
