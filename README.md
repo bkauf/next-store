@@ -63,7 +63,7 @@ cd next-store/demo-website/
 touch .env
 ```
 
-Create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this demo app locally with 'npm run dev' you will need a service account, see option section below for more details. If you would like to run this on Cloud Run you do not need a local service account.
+Create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this demo app locally with 'npm run dev' you will need a service account that has GCS object admin permissions, see option section below for more details. If you would like to run this on Cloud Run you do not need a local service account.
 
 .env file contents:
 ```sh
@@ -71,7 +71,7 @@ GEMINI_API_KEY="From step 1"
 GCS_BUCKET="next-demo"
 WEAVIATE_SERVER="from weaviate install steps"
 WEAVIATE_API_KEY="next-demo349834"
-#If you plan to run this locally you will need the following sevice account varable
+#If you plan to run this locally you a sevice account file with GCS object admin permissions
 #GOOGLE_APPLICATION_CREDENTIALS="sa.json"
 ```
 
