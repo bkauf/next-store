@@ -82,7 +82,7 @@ export REPO_NAME="next-demo"
 gcloud artifacts repositories create $REPO_NAME --repository-format=docker \
     --location=$LOCATION --description="Docker repository" \
     --project=$PROJECT_ID
-
+```
 
 
 1. Create a container image to store in the image repo
