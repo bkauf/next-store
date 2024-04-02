@@ -201,7 +201,7 @@ The following steps will walk through adding the nessessary variables to the dem
     touch .env
     ```
 
-    Create a .env file in the demo-website directory and replace the variables below with your own. If you would like to run this demo app locally with *npm run dev* you will need a service account that has GCS object admin permissions, see option section below for more details. If you would like to run this on Cloud Run you do not need a local service account.
+    Create a .env file in the demo-website directory for the NextJS build process and replace the variables below with your own. If you would like to run this demo app locally with *npm run dev* you will also need a [service account](https://cloud.google.com/iam/docs/service-accounts-create) that has GCS object admin permissions. See optional variable below. If you would like to run this on Cloud Run you do not need a local service account.
 
     **.env file** 
     ```sh
@@ -209,7 +209,7 @@ The following steps will walk through adding the nessessary variables to the dem
     GCS_BUCKET="next-demo"
     WEAVIATE_SERVER="from weaviate install steps"
     WEAVIATE_API_KEY="next-demo349834"
-    #If you plan to run this locally you a sevice account file with GCS object admin permissions
+    #If you plan to run this locally use a sevice account file with GCS object admin permissions
     #GOOGLE_APPLICATION_CREDENTIALS="sa.json"
     ```
 
