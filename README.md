@@ -147,11 +147,12 @@ cloudrun.googleapis.com
     sleep 2 
     done
     echo "External GRPC IP obtained: $WEAVIATE_SERVER_GRPC"
-```
+    ```
 
 ### Configure the Database
 
 1. Install the weaviate client
+
     ```sh
     pip3 install -U weaviate-client  # For beta versions: `pip install --pre -U "weaviate-client==4.*"`
     ```
