@@ -7,8 +7,6 @@ This demo application creates a product catalog that is stored in a [Weaviate](h
 
 ![Next Demo App](https://github.com/bkauf/next-store/blob/main/product-and-search.png)
 
-
-
 ![Next Demo Achitecture](https://github.com/bkauf/next-store/blob/main/diagram.png)
 
 ## To Deploy this demo...
