@@ -151,7 +151,7 @@ cloudrun.googleapis.com
 
 ### Configure the Database
 
-1. Install the weaviate client
+1. Install the Weaviate client
 
     ```sh
     pip3 install -U weaviate-client  # For beta versions: `pip install --pre -U "weaviate-client==4.*"`
