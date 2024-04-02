@@ -88,8 +88,6 @@ cloudrun.googleapis.com
 
     ```
 
-    --service-account=$SA_NAME@$PROJECT_ID.iam.gserviceaccount.com \
-
 
 #### Install Weaviate 
 
