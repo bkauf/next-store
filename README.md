@@ -130,17 +130,17 @@ while [[ -z "$WEAVIATE_SERVER" ]]; do
   WEAVIATE_SERVER=$(kubectl get service weaviate -n weaviate -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
   sleep 2 
 done
-
 echo "External HTTP IP obtained: $WEAVIATE_SERVER"
+
 ```
 Optionally, we can get the IP of the GRPC service as well
+
 ```sh
 WEAVIATE_SERVER_GRPC=""
 while [[ -z "$WEAVIATE_SERVER_GRPC" ]]; do
-  GRPC_IP=$(kubectl get service weaviate-grpc -n weaviate -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  WEAVIATE_SERVER_GRPC=$(kubectl get service weaviate-grpc -n weaviate -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
   sleep 2 
 done
-
 echo "External GRPC IP obtained: $WEAVIATE_SERVER_GRPC"
 ```
 
