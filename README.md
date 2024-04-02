@@ -266,7 +266,7 @@ The following steps will walk through adding the nessessary variables to the dem
     Navigate to the demo application via the service URL returned. You can use the data below to create a new item and search for it:
 
 
-    - Title: "Project Sushi Tshirt",
-    - Category: "tees Tshirts",
-    - Image: "https://shop.googlemerchandisestore.com/store/20190522377/assets/items/images/GGCPGXXX1338.jpg",
+    - Title: Project Sushi Tshirt
+    - Category: tees Tshirts
+    - Image: https://shop.googlemerchandisestore.com/store/20190522377/assets/items/images/GGCPGXXX1338.jpg
 
