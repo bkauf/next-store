@@ -99,7 +99,7 @@ kubectl apply -f weaviate/storage-class.yaml
 Let's create a secret API KEY for weaviate so we don't allow unauthenticated access.
 
 ```sh
-WEAVIATE_API_KEY=<some secret key string> # use any random string, make sure you save it
+WEAVIATE_API_KEY=" next-demo349834" # or use any other random string
 ```
 Let's store the key as a kubernetes secret.
 
@@ -125,23 +125,23 @@ helm upgrade --install weaviate weaviate/weaviate \
 #### Get Weaviate Server IPs
 
 ```sh
-HTTP_IP=""
-while [[ -z "$HTTP_IP" ]]; do
-  HTTP_IP=$(kubectl get service weaviate -n weaviate -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+WEAVIATE_SERVER=""
+while [[ -z "$WEAVIATE_SERVER" ]]; do
+  WEAVIATE_SERVER=$(kubectl get service weaviate -n weaviate -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
   sleep 2 
 done
 
-echo "External HTTP IP obtained: $HTTP_IP"
+echo "External HTTP IP obtained: $WEAVIATE_SERVER"
 ```
 Optionally, we can get the IP of the GRPC service as well
 ```sh
-GRPC_IP=""
-while [[ -z "$GRPC_IP" ]]; do
+WEAVIATE_SERVER_GRPC=""
+while [[ -z "$WEAVIATE_SERVER_GRPC" ]]; do
   GRPC_IP=$(kubectl get service weaviate-grpc -n weaviate -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
   sleep 2 
 done
 
-echo "External GRPC IP obtained: $GRPC_IP"
+echo "External GRPC IP obtained: $WEAVIATE_SERVER_GRPC"
 ```
 
 ### Setup the Demo application
