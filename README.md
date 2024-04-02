@@ -54,26 +54,21 @@ iam.googleapis.com \
 container.googleapis.com \
 artifactregistry.googleapis.com \
 clouddeploy.googleapis.com \
-cloudrun.googleapis.com
+run.googleapis.com
 ```
 
 #### Deploy the GKE Cluster
 1. Set environment varia1bles used in later steps.
 
     ```sh
-    export CLUSTER_NAME=demo-cluster # A name for your cluster
-    export SA_NAME=$CLUSTER_NAME-sa # A name for your service account
-    export LOCATION=us-central1 # Google cloud region to host your infrastucture
+    export CLUSTER_NAME=demo-cluster # A name for your cluster, you can change this if you want.
+    export LOCATION=us-central1 # Google cloud region to host your infrastucture, you can change this if you want.
     ```
 
-1. Create a service account for the GKE cluster. and add the necessary roles.
+1. We will use the **default** VPC to deploy the GKE cluster into. In some environments, the autocreation of the default VPC is disabled by the administrator and default network will not be present. If your project doesn't have it, simply create a new VPC network named **default** and add the add the firewall rules mentioned [here](https://cloud.google.com/firewall/docs/firewalls#more_rules_default_vpc) to the VPC. You can check if the default network exists by running this command.
 
     ```sh
-    gcloud iam service-accounts create $SA_NAME --display-name="Demo cluster service account"
-
-    gcloud projects add-iam-policy-binding $PROJECT_ID  \
-    --member=serviceAccount:$SA_NAME@$PROJECT_ID.iam.gserviceaccount.com \
-    --role=roles/monitoring.metricWriter
+    gcloud compute networks list
     ```
 
 1. Deploy a small regional GKE Cluster. This step can take several minutes to finish.
@@ -105,7 +100,7 @@ cloudrun.googleapis.com
 1. Let's create a secret API KEY for weaviate so we don't allow unauthenticated access.
 
     ```sh
-    export WEAVIATE_API_KEY="next-demo349834" # or use any other random string
+    export WEAVIATE_API_KEY="next-demo349834" # you can choose another random string as the key.
     ```
 1. Store the key as a kubernetes secret.
 
@@ -177,14 +172,11 @@ cloudrun.googleapis.com
 
 The following steps will walk through adding the nessessary variables to the demo application, creating a container for it, then running it on Google Cloud Run.
 
-1.  Get your Gemini API key
-    Go to https://developers.generativeai.google/ to create a Gemini API key. This is necessary to be able to run the demo.
-
 1.  Create your storage bucket and allow public access to it.
 
 
     ```sh
-    export GCS_BUCKET="next-demo"
+    export GCS_BUCKET="$PROJECT_ID-next-demo"
 
     gcloud storage buckets create gs://$GCS_BUCKET --location=$LOCATION \
     --no-public-access-prevention
@@ -208,10 +200,10 @@ The following steps will walk through adding the nessessary variables to the dem
 
     **.env file** 
     ```sh
-    GEMINI_API_KEY="From step 1"
-    GCS_BUCKET="next-demo"
+    GEMINI_API_KEY="The GEMINI api key you retrieved earlier"
+    GCS_BUCKET="The name of the bucket you created earlier"
     WEAVIATE_SERVER="from weaviate install steps"
-    WEAVIATE_API_KEY="next-demo349834"
+    WEAVIATE_API_KEY="next-demo349834" 
     #If you plan to run this locally use a sevice account file with GCS object admin permissions
     #GOOGLE_APPLICATION_CREDENTIALS="sa.json"
     ```
