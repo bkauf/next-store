@@ -99,7 +99,7 @@ kubectl apply -f weaviate/storage-class.yaml
 Let's create a secret API KEY for weaviate so we don't allow unauthenticated access.
 
 ```sh
-WEAVIATE_API_KEY=" next-demo349834" # or use any other random string
+WEAVIATE_API_KEY="next-demo349834" # or use any other random string
 ```
 Let's store the key as a kubernetes secret.
 
