@@ -158,7 +158,7 @@ cloudrun.googleapis.com
     ```
 
 1. Create the database schema and load the sample files
-    Run the following commands from the root directory of the repo where the first_99_objects.json file is located.
+    by running the following script from the root directory of the repo where the first_99_objects.json file is located.
 
 
     ```sh
@@ -182,7 +182,6 @@ The following steps will walk through adding the nessessary variables to the dem
 
     ```sh
     export GCS_BUCKET="next-demo"
-    export LOCATION="us-central1"
 
     gcloud storage buckets create gs://$GCS_BUCKET --location=$LOCATION \
     --no-public-access-prevention
@@ -244,15 +243,12 @@ The following steps will walk through adding the nessessary variables to the dem
     --role="roles/storage.objectAdmin"
     ```
 
-1. Deploy the Container to Cloud Run.
+1. Deploy the container image to Cloud Run.
 
     The following commands set your envorinemnt varaibles for Cloud Run and also the service account that allows uploads to your public Google Cloud Storage bucket.
 
     ```sh
     export CLOUD_RUN_NAME="next-store"
-    export WEAVIATE_API_KEY="next-demo349834"
-    export WEAVIATE_SERVER="[server IP]"
-    export GEMINI_API_KEY="From step 1"
 
     gcloud run deploy $CLOUD_RUN_NAME \
         --image $LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/next-demo:1.0 \
