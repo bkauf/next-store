@@ -25,14 +25,14 @@ cd next-store
 - Set this API key as an environment variable
 
 ```sh
-GEMINI_API_KEY=<your Gemini API key>
+export GEMINI_API_KEY=<your Gemini API key>
 ```
 
 #### Enable the necessary Google Cloud APIs
 Set your project id
 
 ```sh
-PROJECT_ID=<your project id>
+export PROJECT_ID=<your project id>
 gcloud config set core/project $PROJECT_ID
 ```
 Enable the necessary Google cloud APIs for your project. These APIs are necessary for installing the Weaviate database and to run the Demo app.
@@ -53,98 +53,123 @@ cloudrun.googleapis.com
 ```
 
 #### Deploy the GKE Cluster
-Set some environment variables used in later steps.
+1. Set environment varia1bles used in later steps.
 
-```sh
-CLUSTER_NAME=demo-cluster # A name for your cluster
-SA_NAME=$CLUSTER_NAME-sa # A name for your service account
-REGION=us-central1 # Google cloud region to host your infrastucture
-```
-Create a service account for the GKE cluster. and add the necessary roles.
+    ```sh
+    export CLUSTER_NAME=demo-cluster # A name for your cluster
+    export SA_NAME=$CLUSTER_NAME-sa # A name for your service account
+    export LOCATION=us-central1 # Google cloud region to host your infrastucture
+    ```
 
-```sh
-gcloud iam service-accounts create $SA_NAME --display-name="Demo cluster service account"
+1. Create a service account for the GKE cluster. and add the necessary roles.
 
-gcloud projects add-iam-policy-binding $PROJECT_ID  \
---member=serviceAccount:$SA_NAME@$PROJECT_ID.iam.gserviceaccount.com \
---role=roles/monitoring.metricWriter
-```
+    ```sh
+    gcloud iam service-accounts create $SA_NAME --display-name="Demo cluster service account"
 
-Deploy a small regional GKE Cluster. This step can take several minutes to finish.
+    gcloud projects add-iam-policy-binding $PROJECT_ID  \
+    --member=serviceAccount:$SA_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+    --role=roles/monitoring.metricWriter
+    ```
 
-```sh 
-gcloud container clusters create $CLUSTER_NAME \
- --project=$PROJECT_ID \
- --region=$REGION \
- --enable-ip-alias \
- --num-nodes=1 \
- --service-account=$SA_NAME@$PROJECT_ID.iam.gserviceaccount.com \
- --scopes=https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring,https://www.googleapis.com/auth/cloud-platform
+1. Deploy a small regional GKE Cluster. This step can take several minutes to finish.
 
- ```
+    ```sh 
+    gcloud container clusters create $CLUSTER_NAME \
+    --project=$PROJECT_ID \
+    --region=$LOCATION \
+    --enable-ip-alias \
+    --num-nodes=1 \
+    --scopes=https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring,https://www.googleapis.com/auth/cloud-platform
+
+    ```
+
+    --service-account=$SA_NAME@$PROJECT_ID.iam.gserviceaccount.com \
+
 
 #### Install Weaviate 
 
-Let's connect to the cluster
-```sh
-gcloud container clusters get-credentials $CLUSTER_NAME --region $REGION --project $PROJECT_ID
-```
+1. Connect to the cluster
+    ```sh
+    gcloud container clusters get-credentials $CLUSTER_NAME --region $LOCATION --project $PROJECT_ID
+    ```
 
-We are going to use the regional persistant disk storage class for weaviate, so we'll install that storage class in the cluster.
+1. We are going to use the regional persistant disk storage class for weaviate, so we'll install that storage class in the cluster.
 
-```sh
-kubectl apply -f weaviate/storage-class.yaml
-```
+    ```sh
+    kubectl apply -f weaviate/storage-class.yaml
+    ```
 
-Let's create a secret API KEY for weaviate so we don't allow unauthenticated access.
+1. Let's create a secret API KEY for weaviate so we don't allow unauthenticated access.
 
-```sh
-WEAVIATE_API_KEY="next-demo349834" # or use any other random string
-```
-Let's store the key as a kubernetes secret.
+    ```sh
+    export WEAVIATE_API_KEY="next-demo349834" # or use any other random string
+    ```
+1. Store the key as a kubernetes secret.
 
-```sh
-kubectl create namespace weaviate
+    ```sh
+    kubectl create namespace weaviate
 
-kubectl create secret generic user-keys \
---from-literal=AUTHENTICATION_APIKEY_ALLOWED_KEYS=$WEAVIATE_API_KEY \
--n weaviate
-```
-Let's install Weaviate using a helm chart.
+    kubectl create secret generic user-keys \
+    --from-literal=AUTHENTICATION_APIKEY_ALLOWED_KEYS=$WEAVIATE_API_KEY \
+    -n weaviate
+    ```
+1. Install Weaviate using a helm chart.
 
-```sh
-helm repo add weaviate https://weaviate.github.io/weaviate-helm
+    ```sh
+    helm repo add weaviate https://weaviate.github.io/weaviate-helm
 
-helm upgrade --install weaviate weaviate/weaviate \
--f weaviate/demo-values.yaml \
---set modules.generative-palm.apiKey=$GEMINI_API_KEY \
---set modules.text2vec-palm.apiKey=$GEMINI_API_KEY \
---namespace weaviate
-```
+    helm upgrade --install weaviate weaviate/weaviate \
+    -f weaviate/demo-values.yaml \
+    --set modules.generative-palm.apiKey=$GEMINI_API_KEY \
+    --set modules.text2vec-palm.apiKey=$GEMINI_API_KEY \
+    --namespace weaviate
+    ```
 
 #### Get Weaviate Server IPs
 
-```sh
-WEAVIATE_SERVER=""
-while [[ -z "$WEAVIATE_SERVER" ]]; do
-  WEAVIATE_SERVER=$(kubectl get service weaviate -n weaviate -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  sleep 2 
-done
-echo "External HTTP IP obtained: $WEAVIATE_SERVER"
+1. Get the HTTP IP that the web server will use
 
+    ```sh
+    export WEAVIATE_SERVER=""
+    while [[ -z "$WEAVIATE_SERVER" ]]; do
+    WEAVIATE_SERVER=$(kubectl get service weaviate -n weaviate -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    sleep 2 
+    done
+    echo "External HTTP IP obtained: $WEAVIATE_SERVER"
+
+    ```
+1. Get the IP of the GRPC service that the database creation script will use
+
+    ```sh
+    export WEAVIATE_SERVER_GRPC=""
+    while [[ -z "$WEAVIATE_SERVER_GRPC" ]]; do
+    WEAVIATE_SERVER_GRPC=$(kubectl get service weaviate-grpc -n weaviate -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    sleep 2 
+    done
+    echo "External GRPC IP obtained: $WEAVIATE_SERVER_GRPC"
 ```
-Optionally, we can get the IP of the GRPC service as well
 
-```sh
-WEAVIATE_SERVER_GRPC=""
-while [[ -z "$WEAVIATE_SERVER_GRPC" ]]; do
-  WEAVIATE_SERVER_GRPC=$(kubectl get service weaviate-grpc -n weaviate -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  sleep 2 
-done
-echo "External GRPC IP obtained: $WEAVIATE_SERVER_GRPC"
-```
+### Configure the Database
 
-### Setup the Demo application
+1. Install the weaviate client
+    ```sh
+    pip3 install -U weaviate-client  # For beta versions: `pip install --pre -U "weaviate-client==4.*"`
+    ```
+
+1. Create the database schema and load the sample files
+    Run the following commands from the root directory of the repo where the first_99_objects.json file is located.
+
+
+    ```sh
+    python3 createdb.py 
+    ```
+    You should get an output similar to the below if the database was created successfully:
+    ```
+    Items added to the database: 99
+    ```
+
+
+## Setup the Demo application
 
 The following steps will walk through adding the nessessary variables to the demo application, creating a container for it, then running it on Google Cloud Run.
 
@@ -235,7 +260,7 @@ The following steps will walk through adding the nessessary variables to the dem
         --region $LOCATION \
     --set-env-vars=GEMINI_API_KEY=$GEMINI_API_KEY, \
     --set-env-vars=GCS_BUCKET=$GCS_BUCKET, \
-    --set-env-vars=WEAVIATE_SERVER=$WEAVIATE_SERVER, \
+    --set-env-vars=WEAVIATE_SERVER=http://$WEAVIATE_SERVER, \
     --set-env-vars=WEAVIATE_API_KEY=$WEAVIATE_API_KEY \
     --service-account=$SERVICE_ACCOUNT_NAME
     ```
