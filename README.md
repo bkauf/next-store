@@ -262,12 +262,10 @@ The following steps will walk through adding the nessessary variables to the dem
     --service-account=$SERVICE_ACCOUNT_NAME
     ```
 
-    Navigate to the demo application via the service URL returned. You can use the same data below to create a new item:
+    Navigate to the demo application via the service URL returned. You can use the data below to create a new item:
 
-    ```sh
 
-            "title": "Project Sushi Tshirt",
-            "category": "Clothing  accessories Tops  tees Tshirts",
-            "Test image link": "https://shop.googlemerchandisestore.com/store/20190522377/assets/items/images/GGCPGXXX1338.jpg",
+    - "title": "Project Sushi Tshirt",
+    - "category": "Clothing  accessories Tops  tees Tshirts",
+    - "Test image link": "https://shop.googlemerchandisestore.com/store/20190522377/assets/items/images/GGCPGXXX1338.jpg",
 
-    ```
