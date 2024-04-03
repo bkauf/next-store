@@ -27,8 +27,6 @@ envSecrets:
 modules:
   text2vec-palm:
     enabled: true
-  generative-palm:
-    enabled: true
 
 storage:
   storageClassName: 'regional-pd'

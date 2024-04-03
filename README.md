@@ -118,7 +118,6 @@ run.googleapis.com
 
     helm upgrade --install weaviate weaviate/weaviate \
     -f weaviate/demo-values.yaml \
-    --set modules.generative-palm.apiKey=$GEMINI_API_KEY \
     --set modules.text2vec-palm.apiKey=$GEMINI_API_KEY \
     --namespace weaviate
     ```
